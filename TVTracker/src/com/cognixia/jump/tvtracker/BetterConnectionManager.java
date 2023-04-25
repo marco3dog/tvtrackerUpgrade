@@ -36,21 +36,21 @@ public class BetterConnectionManager {
 		return connection;
 	}
 	
-	public static void main(String[] args) {
-		System.out.println("Welcome to our program");
-		System.out.println("Establishing db connection....");
-		
-		try {
-			Connection connection = BetterConnectionManager.getConnection();
-		} catch (FileNotFoundException e) {
-			System.out.println("Couldn't load detail for connection");
-		} catch (ClassNotFoundException e) {
-			System.out.println("Couldn't load driver for connection");
-		} catch (IOException e) {
-			System.out.println("Couldn't connection details");
-		} catch (SQLException e) {
-			System.out.println("Couldn't connect to the db");
-		}
-		System.out.println("Connected with no errors");
-	}
+//	public static void main(String[] args) {
+//		System.out.println("Welcome to our program");
+//		System.out.println("Establishing db connection....");
+//		
+//		try {
+//			Connection connection = BetterConnectionManager.getConnection();
+//		} catch (FileNotFoundException e) {
+//			System.out.println("Couldn't load detail for connection");
+//		} catch (ClassNotFoundException e) {
+//			System.out.println("Couldn't load driver for connection");
+//		} catch (IOException e) {
+//			System.out.println("Couldn't connection details");
+//		} catch (SQLException e) {
+//			System.out.println("Couldn't connect to the db");
+//		}
+//		System.out.println("Connected with no errors");
+//	}
 }

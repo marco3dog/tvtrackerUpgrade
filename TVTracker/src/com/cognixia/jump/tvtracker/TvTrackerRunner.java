@@ -1,7 +1,5 @@
 package com.cognixia.jump.tvtracker;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +11,6 @@ import java.util.Scanner;
 
 import com.cognixia.jump.dao.TVTrackerDaoSql;
 import com.cognixia.jump.exceptions.PasswordNotFoundException;
-import com.cognixia.jump.exceptions.UserNotFoundException;
 import com.cognixia.jump.exceptions.UsernameNotFoundException;
 
 public class TvTrackerRunner {
