@@ -1,4 +1,4 @@
-package com.cognixia.jump.dao;
+package com.tvshowtracker.dao;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.cognixia.jump.tvtracker.BetterConnectionManager;
-import com.cognixia.jump.tvtracker.Show;
+import com.tvshowtracker.connection.BetterConnectionManager;
+import com.tvshowtracker.model.Show;
 
 public class TVTrackerDaoSql implements TVTrackerDao {
 	

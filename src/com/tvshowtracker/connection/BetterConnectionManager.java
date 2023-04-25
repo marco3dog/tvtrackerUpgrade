@@ -1,4 +1,4 @@
-package com.cognixia.jump.tvtracker;
+package com.tvshowtracker.connection;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

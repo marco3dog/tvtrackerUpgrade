@@ -1,4 +1,4 @@
-package com.cognixia.jump.exceptions;
+package com.tvshowtracker.exception;
 
 public class UserNotFoundException extends Exception {
 	

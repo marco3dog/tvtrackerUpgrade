@@ -1,4 +1,4 @@
-package com.cognixia.jump.tvtracker;
+package com.tvshowtracker.model;
 
 public class Show {
 	private int showId;

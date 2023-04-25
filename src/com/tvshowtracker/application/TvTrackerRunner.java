@@ -1,4 +1,4 @@
-package com.cognixia.jump.tvtracker;
+package com.tvshowtracker.application;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,9 +9,13 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import com.cognixia.jump.dao.TVTrackerDaoSql;
-import com.cognixia.jump.exceptions.PasswordNotFoundException;
-import com.cognixia.jump.exceptions.UsernameNotFoundException;
+import com.tvshowtracker.connection.BetterConnectionManager;
+import com.tvshowtracker.dao.TVTrackerDaoSql;
+import com.tvshowtracker.exception.PasswordNotFoundException;
+import com.tvshowtracker.exception.UsernameNotFoundException;
+import com.tvshowtracker.model.Show;
+import com.tvshowtracker.model.User;
+import com.tvshowtracker.model.UserShow;
 
 public class TvTrackerRunner {
 
