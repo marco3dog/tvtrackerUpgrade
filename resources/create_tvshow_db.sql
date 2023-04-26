@@ -4,7 +4,8 @@ use tvtracker;
 create table user(
 userid int primary key auto_increment,
 username varchar(50) NOT NULL unique,
-password varchar(50) NOT NULL 
+password varchar(50) NOT NULL,
+Role varchar(5) NOT NULL 
 );
 
 create table shows(
