@@ -20,11 +20,13 @@ import com.tvshowtracker.model.UserShow;
 public class TrackerController {
 	
 	private static TVTrackerDaoSql dao = new TVTrackerDaoSql();
+	private static User currentUser;
 	
 	
 	public static void run() {
+		System.out.println("Welcome to your TV Show Tracker");
 		
-		User currentUser = dao.login(scan);
+		currentUser = dao.login(*Username*, *Password*);
 		if(currentUser.getList().size() > 0) {
 			System.out.println("------------");
 			System.out.println("Your Shows:");
@@ -189,6 +191,13 @@ public class TrackerController {
 			case 4:{System.out.println("Goodbye!"); return;}
 			default: {continue;}
 			}
+		}
+	}
+	
+	public static void displayShowsToAdd(TVTrackerDaoSql dao) {
+		ArrayList<Show> arr = (ArrayList<Show>) dao.getAllShows();
+		for(int i = 0; i < arr.size(); i++) {
+			System.out.println(arr.get(i));
 		}
 	}
 	
