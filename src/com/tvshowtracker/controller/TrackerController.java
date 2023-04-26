@@ -16,37 +16,46 @@ import com.tvshowtracker.exception.UsernameNotFoundException;
 import com.tvshowtracker.model.Show;
 import com.tvshowtracker.model.User;
 import com.tvshowtracker.model.UserShow;
+import com.tvshowtracker.utils.ConsoleScanner;
 
 public class TrackerController {
 	
-	private static TVTrackerDaoSql dao = new TVTrackerDaoSql();
+	private static User currentUser;
 	
 	
 	public static void run() {
 		
-		User currentUser = dao.login(scan);
-		if(currentUser.getList().size() > 0) {
-			System.out.println("------------");
-			System.out.println("Your Shows:");
-			for(int i = 0; i < currentUser.getList().size(); i++) {
-				System.out.println(currentUser.getList().get(i).getName() + ": " + currentUser.getList().get(i).getEpisodesWatched() + "/" + currentUser.getList().get(i).getEpisodes() + " episodes watched");
+		System.out.println("Welcome to your TV Show Tracker");
+		
+		while (true) {
+			
+			System.out.print("Username: ");
+			String username = ConsoleScanner.getString();
+			System.out.print("Password: ");
+			String password = ConsoleScanner.getString();
+			currentUser = TVTrackerDaoSql.login(username, password);
+			
+			if (currentUser == null) {
+				
+				System.out.println("Invalid credentials.");
+			}
+			else {
+				session();
 			}
 		}
-		else {
-			System.out.println("You have no tracked shows.");
+	}
+	
+	public static void session() {
+		
+		TVTrackerDaoSql.createList(currentUser);
+		System.out.println("------------");
+		System.out.println("Your Shows:");
+		for(int i = 0; i < currentUser.getList().size(); i++) {
+			System.out.println(currentUser.getList().get(i).getName() + ": " + currentUser.getList().get(i).getEpisodesWatched() + "/" + currentUser.getList().get(i).getEpisodes() + " episodes watched");
 		}
 		System.out.println("------------");
 		
 		int option = 0;
-		
-		try {
-			dao.setConnection();
-		}
-		
-		catch (Exception e1) {
-			e1.printStackTrace();
-		} 
-		
 		
 		while(true) {
 			System.out.println("Select an option by entering 1, 2, 3, or 4.");
@@ -56,39 +65,41 @@ public class TrackerController {
 			System.out.println("3.) View all your shows.");
 			System.out.println("4.) Exit.");
 			System.out.println("------------");
+			
 			try {
-				option = scan.nextInt();
-				if(option < 1 || option > 4) {
+				option = ConsoleScanner.getInt();
+				if (option < 1 || option > 4) {
 					throw new Exception();
 				}
 			}
 			catch (InputMismatchException e) {
 				System.out.println("Enter a number.");
 				option = 0;
-				scan.next();
+				ConsoleScanner.getString();
 				continue;
 			}
-			catch(Exception e) {
+			catch (Exception e) {
 				System.out.println("Not a valid option.");
 				option = 0;
 				continue;
 			}
 			
 			switch(option) {
+			
 			case 1: { //add a show
 				System.out.println("Enter the showId of the show you want to add.");
-				dao.displayShowsToAdd(dao);
+				TVTrackerDaoSql.displayShowsToAdd(currentUser);
 				boolean goodInput;
 				int showId = 0;
 				int episodesWatched = 0;
 				do {
 					try {
-						showId = scan.nextInt();
+						showId = ConsoleScanner.getInt();
 						goodInput = true;
 					}
 					catch (InputMismatchException e) {
 						System.out.println("Enter a number.");
-						scan.next();
+						ConsoleScanner.getString();
 						goodInput = false;
 					}
 					catch(Exception e) {
@@ -102,12 +113,12 @@ public class TrackerController {
 				System.out.println("How many episodes have you seen?");
 				do {
 					try {
-						episodesWatched = scan.nextInt();
+						episodesWatched = ConsoleScanner.getInt();
 						goodInput = true;
 					}
 					catch (InputMismatchException e) {
 						System.out.println("Enter a number.");
-						scan.next();
+						ConsoleScanner.getString();
 						goodInput = false;
 					}
 					catch(Exception e) {
@@ -198,16 +209,24 @@ public class TrackerController {
 			case 4:{System.out.println("Goodbye!"); return;}
 			default: {continue;}
 			}
+			
 		}
 	}
 	
-	public static void displayShowsToAdd(TVTrackerDaoSql dao) {
-		ArrayList<Show> arr = (ArrayList<Show>) dao.getAllShows();
-		
-		for(int i = 0; i < arr.size(); i++) {
-			System.out.println(arr.get(i));
-		}
-	}
+//	public static void displayShowsToAdd(TVTrackerDaoSql dao) {
+//		ArrayList<Show> arr = (ArrayList<Show>) dao.getAllShows();
+//		for(int i = 0; i < arr.size(); i++) {
+//			System.out.println(arr.get(i));
+//		}
+//	}
+//	
+//	public static void displayShowsToAdd(TVTrackerDaoSql dao) {
+//		ArrayList<Show> arr = (ArrayList<Show>) dao.getAllShows();
+//		
+//		for(int i = 0; i < arr.size(); i++) {
+//			System.out.println(arr.get(i));
+//		}
+//	}
 }
 
 
