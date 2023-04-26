@@ -4,3 +4,4 @@ config.properties
 .classpath
 **/.DS_Store
 
+/target/

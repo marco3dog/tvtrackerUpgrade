@@ -13,11 +13,11 @@ insert into shows values(null, 'True Detective', 25);
 
 select * from shows;
 
-insert into user values(null, 'walter', 'chemistry');
-insert into user values(null, 'tony', 'gabagool');
-insert into user values(null, 'jimmy', 'brainblast');
-insert into user values(null, 'hodor', 'hodor');
-insert into user values(null, 'sheen', 'ultralord');
+insert into user values(null, 'walter', 'chemistry', "ADMIN" );
+insert into user values(null, 'tony', 'gabagool', "USER" );
+insert into user values(null, 'jimmy', 'brainblast', "USER");
+insert into user values(null, 'hodor', 'hodor', "USER");
+insert into user values(null, 'sheen', 'ultralord', "ADMIN");
 
 select * from user;
 
