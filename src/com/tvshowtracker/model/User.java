@@ -9,6 +9,9 @@ import java.util.List;
 
 import com.tvshowtracker.connection.BetterConnectionManager;
 
+
+enum Role {ADMIN, USER};
+
 public class User {
 	
 	private int id;
@@ -16,7 +19,7 @@ public class User {
 	private String password;
 	private List<UserShow> list;
 	private Connection conn;
-	
+	private Role userRole;
 	
 	public User(int id, String name, String password) {
 		super();
@@ -24,6 +27,7 @@ public class User {
 		this.name = name;
 		this.password = password;
 		this.list = new ArrayList<UserShow>();
+		this.userRole = Role.USER;
 		
 		try{
 			this.conn = BetterConnectionManager.getConnection();
@@ -58,7 +62,13 @@ public class User {
 	public void setList(List<UserShow> list) {
 		this.list = list;
 	}
-	
+	public Role getUserRole() {
+		return userRole;
+	}
+	public void setUserRole(Role userRole) {
+		this.userRole = userRole;
+	}
+
 	private void createList(){
 		//List<UserShow> usersShows = new ArrayList<UserShow>(); 
 		try (Statement stmt = conn.createStatement();
