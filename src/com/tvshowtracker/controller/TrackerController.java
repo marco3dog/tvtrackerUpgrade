@@ -189,6 +189,7 @@ public class TrackerController {
 			case 4:{System.out.println("Goodbye!"); return;}
 			default: {continue;}
 			}
+			
 		}
 	}
 	
