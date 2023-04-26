@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class BetterConnectionManager {
+	
 	private static Connection connection;
 	
 	private static void makeConnection() throws FileNotFoundException, IOException, ClassNotFoundException, SQLException {

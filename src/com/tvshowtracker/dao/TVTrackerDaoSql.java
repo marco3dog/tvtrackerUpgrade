@@ -18,17 +18,10 @@ import com.tvshowtracker.exception.UsernameNotFoundException;
 import com.tvshowtracker.model.Show;
 import com.tvshowtracker.model.User;
 
-public class TVTrackerDaoSql implements TVTrackerDao {
+public class TVTrackerDaoSql {
 	
-	private Connection conn;
+	private static Connection conn = BetterConnectionManager.getConnection();
 
-	@Override
-	public void setConnection() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException {
-		conn = BetterConnectionManager.getConnection();
-		
-	}
-
-	@Override
 	public List<Show> getAllShows() {
 		List<Show> showList = new ArrayList<Show>();
 		
@@ -36,6 +29,7 @@ public class TVTrackerDaoSql implements TVTrackerDao {
 			ResultSet rs = stmt.executeQuery("SELECT * FROM shows");
 			) {
 			while (rs.next()) {
+				
 				int showId = rs.getInt("showid");
 				String name = rs.getString("name");
 				int episodes = rs.getInt("episodes");
@@ -43,15 +37,14 @@ public class TVTrackerDaoSql implements TVTrackerDao {
 				Show show = new Show(showId, name, episodes);
 				showList.add(show);
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 
 		return showList;
 	}
 	
-	@Override
 	public Optional<Show> getShowById(int id) {
 		
 		try (PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM show WHERE showid = ?");) {
@@ -68,19 +61,22 @@ public class TVTrackerDaoSql implements TVTrackerDao {
 				Optional<Show> foundShow = Optional.of(show);
 				rs.close();
 				return foundShow;
-			} else {
+			}
+			
+			else {
 				rs.close();
 				return Optional.empty();
 			}
-		} catch (SQLException e) {
+		}
+		
+		catch (SQLException e) {
 			return Optional.empty();
 		}
 	}
 
-	@Override
 	public boolean createShow(String showName, int episodes) {
 		
-		try (PreparedStatement pstmt = conn.prepareStatement("INSERT INTO show values(null, name = ?, episodes = ?)");) {
+		try (PreparedStatement pstmt = conn.prepareStatement("INSERT INTO show VALUES(null, name = ?, episodes = ?)");) {
 			
 			pstmt.setString(1, showName);
 			pstmt.setInt(2, episodes);
@@ -90,13 +86,14 @@ public class TVTrackerDaoSql implements TVTrackerDao {
 			if (updated == 1)
 				return true;
 			
-		} catch (SQLException e) {
+		}
+		
+		catch (SQLException e) {
 			return false;
 		}
 		return false;
 	}
 
-	@Override
 	public boolean deleteShow(int id) {
 		
 		try (PreparedStatement pstmt = conn.prepareStatement("DELETE FROM show WHERE showid = ?");) {
@@ -108,13 +105,14 @@ public class TVTrackerDaoSql implements TVTrackerDao {
 			if (updated == 1)
 				return true;
 			
-		} catch (SQLException e) {
+		}
+		
+		catch (SQLException e) {
 			return false;
 		}
 		return false;
 	}
 
-	@Override
 	public boolean updateShow(String showName, int episodes) {
 		
 		
@@ -128,7 +126,9 @@ public class TVTrackerDaoSql implements TVTrackerDao {
 			if (updated == 1)
 				return true;
 			
-		} catch (SQLException e) {
+		}
+		
+		catch (SQLException e) {
 			return false;
 		}
 		return false;
@@ -136,7 +136,8 @@ public class TVTrackerDaoSql implements TVTrackerDao {
 	
 	//Functions
 	private static boolean isUser(String username, Connection conn) {
-		try(PreparedStatement ps = conn.prepareStatement("select * from user where username = ?")){
+		
+		try(PreparedStatement ps = conn.prepareStatement("select * from user where username = ?")) {
 			ps.setString(1, username);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
@@ -146,13 +147,11 @@ public class TVTrackerDaoSql implements TVTrackerDao {
 		catch(SQLException e) {
 			e.printStackTrace();
 		}
-		
-
 		return false;
 	}
 	
 	private static boolean isCorrectPassword(String username, String password, Connection conn) {
-		try(PreparedStatement ps = conn.prepareStatement("select * from user where username = ? and password = ?")){
+		try(PreparedStatement ps = conn.prepareStatement("select * from user where username = ? and password = ?")) {
 			ps.setString(1, username);
 			ps.setString(2, password);
 			ResultSet rs = ps.executeQuery();
@@ -166,7 +165,7 @@ public class TVTrackerDaoSql implements TVTrackerDao {
 		return false;
 	}
 	
-	private static User login(Scanner scan, Connection conn) {
+	private static User login() {
 		System.out.println("Welcome to your TV Show Tracker");	
 		boolean valid = false;
 		int id = 0;
@@ -213,7 +212,7 @@ public class TVTrackerDaoSql implements TVTrackerDao {
 		}
 		while(!valid);
 		try (Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("select userid from user where username = '" + usernameEntered  +"'");)
+			 ResultSet rs = stmt.executeQuery("select userid from user where username = '" + usernameEntered  +"'");)
 		{
 			while (rs.next()) {
 				id = rs.getInt("userid");
@@ -224,13 +223,6 @@ public class TVTrackerDaoSql implements TVTrackerDao {
 		}
 		return new User(id, usernameEntered, passwordEntered);
 		
-	}
-	
-	public static void displayShowsToAdd(TVTrackerDaoSql dao) {
-		ArrayList<Show> arr = (ArrayList<Show>) dao.getAllShows();
-		for(int i = 0; i < arr.size(); i++) {
-			System.out.println(arr.get(i));
-		}
 	}
 
 }

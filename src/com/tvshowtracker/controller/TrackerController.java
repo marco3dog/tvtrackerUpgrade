@@ -36,14 +36,18 @@ public class TrackerController {
 			System.out.println("You have no tracked shows.");
 		}
 		System.out.println("------------");
+		
 		int option = 0;
-		TVTrackerDaoSql dao = new TVTrackerDaoSql();
+		
 		try {
 			dao.setConnection();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
+		}
+		
+		catch (Exception e1) {
 			e1.printStackTrace();
 		} 
+		
+		
 		while(true) {
 			System.out.println("Select an option by entering 1, 2, 3, or 4.");
 			System.out.println("------------");
@@ -69,10 +73,11 @@ public class TrackerController {
 				option = 0;
 				continue;
 			}
+			
 			switch(option) {
 			case 1: { //add a show
 				System.out.println("Enter the showId of the show you want to add.");
-				displayShowsToAdd(dao);
+				dao.displayShowsToAdd(dao);
 				boolean goodInput;
 				int showId = 0;
 				int episodesWatched = 0;
@@ -91,6 +96,8 @@ public class TrackerController {
 						goodInput = false;
 					}
 				}
+				
+				
 				while(!goodInput);
 				System.out.println("How many episodes have you seen?");
 				do {
@@ -108,6 +115,8 @@ public class TrackerController {
 						goodInput = false;
 					}
 				}
+				
+				
 				while(!goodInput);
 				boolean success = currentUser.addShowToList(showId, episodesWatched);
 				ArrayList<UserShow> temp = (ArrayList<UserShow>) currentUser.getList();
@@ -192,8 +201,13 @@ public class TrackerController {
 		}
 	}
 	
-	
-	
+	public static void displayShowsToAdd(TVTrackerDaoSql dao) {
+		ArrayList<Show> arr = (ArrayList<Show>) dao.getAllShows();
+		
+		for(int i = 0; i < arr.size(); i++) {
+			System.out.println(arr.get(i));
+		}
+	}
 }
 
 
