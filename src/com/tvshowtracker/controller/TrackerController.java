@@ -166,8 +166,10 @@ public class TrackerController {
 
 	public static void displayShowsToAdd() {
 		List<Show> arr = TVTrackerDaoSql.displayShowsToAdd(currentUser);
+		System.out.printf("%-10s %-20s %-10s\n", "Show ID", "Name", "Total Episodes");
 		for(int i = 0; i < arr.size(); i++) {
-			System.out.println(arr.get(i));
+			System.out.printf("%-10d %-20s %-10d\n", arr.get(i).getShowId(), arr.get(i).getName(), arr.get(i).getEpisodes());
+//			System.out.println(arr.get(i));
 		}
 	}
 
