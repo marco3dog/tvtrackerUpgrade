@@ -20,6 +20,7 @@ create table user_shows(
 userid int,
 showid int,
 episodes int NOT NULL,
+rating int,
 primary key(userid, showid),
 foreign key(userid) references user (userid),
 foreign key(showid) references shows (showid)
