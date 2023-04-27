@@ -36,18 +36,21 @@ public class TrackerController {
 	public static void session() {
 
 		TVTrackerDaoSql.createList(currentUser);
-		System.out.println("------------");
-		System.out.println("Your Shows:");
+		System.out.println("==========================");
+		System.out.println("Your Shows");
+		System.out.println("==========================\n");
+		System.out.printf("%-20s %-10s\n", "Name", "Episodes Watched");
 		for(int i = 0; i < currentUser.getList().size(); i++) {
-			System.out.println(currentUser.getList().get(i).getName() + ": " + currentUser.getList().get(i).getEpisodesWatched() + "/" + currentUser.getList().get(i).getEpisodes() + " episodes watched");
+			System.out.printf("%-20s %-1d / %-1d\n",currentUser.getList().get(i).getName(), currentUser.getList().get(i).getEpisodesWatched(), currentUser.getList().get(i).getEpisodes());
 		}
-		System.out.println("------------");
+		System.out.println();
+		System.out.println("--------------------------");
 
 		int option = 0;
 
 		while(true) {
 			System.out.println("Select an option by entering 1, 2, 3, or 4.");
-			System.out.println("------------");
+			System.out.println("--------------------------");
 			System.out.println("1.) Add a show.");
 			System.out.println("2.) Update a show's progress.");
 			System.out.println("3.) View all your shows.");
@@ -103,7 +106,7 @@ public class TrackerController {
 	}
 
 	public static void addShow() {
-		System.out.println("Enter the showId of the show you want to add.");
+		System.out.println("Enter the Show ID of the show you want to add\n");
 		displayShowsToAdd();
 
 		boolean goodInput;
@@ -169,7 +172,6 @@ public class TrackerController {
 		System.out.printf("%-10s %-20s %-10s\n", "Show ID", "Name", "Total Episodes");
 		for(int i = 0; i < arr.size(); i++) {
 			System.out.printf("%-10d %-20s %-10d\n", arr.get(i).getShowId(), arr.get(i).getName(), arr.get(i).getEpisodes());
-//			System.out.println(arr.get(i));
 		}
 	}
 
