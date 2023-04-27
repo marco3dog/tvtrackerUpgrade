@@ -1,6 +1,8 @@
+drop database if exists tvtracker;
 create database tvtracker;
 use tvtracker;
 
+drop table if exists user; 
 create table user(
 userid int primary key auto_increment,
 username varchar(50) NOT NULL unique,
