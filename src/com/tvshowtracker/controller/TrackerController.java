@@ -14,7 +14,6 @@ public class TrackerController {
 
 
 	public static void run() {
-
 		System.out.println("Welcome to your TV Show Tracker");
 
 		while (true) {
@@ -29,6 +28,7 @@ public class TrackerController {
 			}
 			else {
 				session();
+				return;
 			}
 		}
 	}
