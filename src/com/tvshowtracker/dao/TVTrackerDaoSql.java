@@ -291,4 +291,48 @@ public class TVTrackerDaoSql {
 		}
 		return false;
 	}
+	
+	public static int getUsersWhoAreWatching(int showId) {
+		try(PreparedStatement pstmt = conn.prepareStatement(
+				"select COUNT(*) FROM user_shows WHERE showid = ?")
+				){
+			pstmt.setInt(1, showId);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				int watchers = rs.getInt("COUNT(*)");
+				rs.close();
+				return watchers;
+			}
+
+			else {
+				rs.close();
+				return 0;
+			}
+		}
+		catch(SQLException e) {
+			return 0;
+		}
+	}
+	
+	public static int getUsersWhoAreFinished(int showId) {
+		try(PreparedStatement pstmt = conn.prepareStatement(
+				"select COUNT(*) from user_shows us join shows s on us.showid = s.showid where us.episodes = s.episodes and us.showid = ?")
+				){
+			pstmt.setInt(1, showId);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				int watchers = rs.getInt("COUNT(*)");
+				rs.close();
+				return watchers;
+			}
+
+			else {
+				rs.close();
+				return 0;
+			}
+		}
+		catch(SQLException e) {
+			return 0;
+		}
+	}
 }
