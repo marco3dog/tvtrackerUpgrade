@@ -395,11 +395,16 @@ public class TrackerController {
 	}
 
 	public static void viewShows() {
-		System.out.println("------------");
-		System.out.println("Your Shows:");
+		System.out.println("==========================");
+		System.out.println("Your Shows");
+		System.out.println("==========================\n");
+		System.out.printf("%-20s %-10s\n", "Name", "Episodes Watched");
 		for(int i = 0; i < currentUser.getList().size(); i++) {
-			System.out.println(currentUser.getList().get(i).getName() + ": " + currentUser.getList().get(i).getEpisodesWatched() + "/" + currentUser.getList().get(i).getEpisodes() + " episodes watched");
+			System.out.printf("%-20s %-1d / %-1d\n",currentUser.getList().get(i).getName(), currentUser.getList().get(i).getEpisodesWatched(), currentUser.getList().get(i).getEpisodes());
+			System.out.println("        " + TVTrackerDaoSql.getUsersWhoAreWatching(currentUser.getList().get(i).getShowId()) + " user(s) are watching this show. " + TVTrackerDaoSql.getUsersWhoAreFinished(currentUser.getList().get(i).getShowId()) + " user(s) users have finished this show.");
 		}
+		System.out.println();
+		System.out.println("--------------------------");
 	}
 }
 
