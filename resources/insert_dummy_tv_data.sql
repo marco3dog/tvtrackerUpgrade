@@ -21,15 +21,29 @@ insert into user values(null, 'sheen', 'ultralord', "ADMIN");
 
 select * from user;
 
-insert into user_shows values (1, 1, 12);
-insert into user_shows values (2, 7, 42);
-insert into user_shows values (3, 9, 17);
-insert into user_shows values (4, 2, 44);
-insert into user_shows values (5, 9, 60);
-insert into user_shows values (1, 5, 8);
+insert into user_shows values (1, 1, 12, 5);
+insert into user_shows values (2, 7, 42, 5);
+insert into user_shows values (3, 9, 17, 5);
+insert into user_shows values (4, 2, 44, 5);
+insert into user_shows values (5, 9, 60, 5);
+insert into user_shows values (1, 5, 8, 5);
 
 select * from user_shows;
 
-SELECT s.name, us.episodes, s.episodes FROM user_shows us JOIN user u ON us.userid = u.userid JOIN shows s ON us.showid = s.showid WHERE us.userid = 1;
+SELECT 
+    s.name, us.episodes, s.episodes
+FROM
+    user_shows us
+        JOIN
+    user u ON us.userid = u.userid
+        JOIN
+    shows s ON us.showid = s.showid
+WHERE
+    us.userid = 1;
 SELECT s.showid, s.name, us.episodes, s.episodes FROM user_shows us JOIN user u ON us.userid = u.userid JOIN shows s ON us.showid = s.showid WHERE us.userid = 1;	
-select userid from user where username = 'sheen';
+SELECT 
+    userid
+FROM
+    user
+WHERE
+    username = 'sheen';

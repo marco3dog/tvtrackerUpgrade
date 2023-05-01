@@ -325,9 +325,50 @@ public class TVTrackerDaoSql {
 			return false;
 		}
 	}
+	
+	public static int getUserRatingForShow(int userId, int showId) {
+		String query = "select rating "
+				+ "from user_shows us "
+				+ "join shows s on us.showid = s.showid "
+				+ "where us.userid = ? and us.showid = ?";
+
+		try (PreparedStatement ps = conn.prepareStatement(query)) {
+			ps.setInt(1, userId);
+			ps.setInt(2, showId);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				int rating = rs.getInt("rating");
+				return rating;
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return -1;
+	}
+	
+	public static int getAverageRatingForShow(int showId) {
+		String query = "select avg(rating) as 'avg_rating' from user_shows where showid = ? group by showid";
+
+		try (PreparedStatement ps = conn.prepareStatement(query)) {
+			ps.setInt(1, showId);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				int rating = rs.getInt("avg_rating");
+				return rating;
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return -1;
+	}
 
 	public static boolean updateShowRating(User user, int showId, int rating) {
-
 		try (PreparedStatement pstmt = conn.prepareStatement(
 				"UPDATE user_shows SET rating = ? WHERE showid = ? AND userid = ?")
 				) {
