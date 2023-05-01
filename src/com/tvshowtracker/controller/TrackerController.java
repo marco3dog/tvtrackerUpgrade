@@ -36,14 +36,22 @@ public class TrackerController {
 			
 			if (choice.equals("1")) {
 				
-				System.out.println(ConsoleColors.CYAN_BOLD + "+---------------------+");
-				System.out.println("+------ Register -----+");
-				System.out.println("+---------------------+\n" + ConsoleColors.RESET);
-				System.out.print("Enter a username: ");
-				String username = ConsoleScanner.getString();
-				System.out.println("Enter a password: ");
-				String password = ConsoleScanner.getString();
-				TVTrackerDaoSql.addUser(username, password);
+				while(true) {
+					
+					System.out.println(ConsoleColors.CYAN_BOLD + "+---------------------+");
+					System.out.println("+------ Register -----+");
+					System.out.println("+---------------------+\n" + ConsoleColors.RESET);
+					System.out.print("Enter a username: ");
+					String username = ConsoleScanner.getString();
+					System.out.print("Enter a password: ");
+					String password = ConsoleScanner.getString();
+					if(TVTrackerDaoSql.getUser(username,password) != null) {
+						System.out.println(ConsoleColors.RED + "Username already taken" + ConsoleColors.RESET);
+					} else {
+						TVTrackerDaoSql.addUser(username, password);
+						break;
+					}
+				}
 			}
 			
 			else if (choice.equals("2")) {
@@ -136,7 +144,7 @@ public class TrackerController {
 		}
 		
 		else {
-			System.out.println("You're now logged out!");
+			System.out.println(ConsoleColors.ITALIC + ConsoleColors.GREEN +"You're now logged out!" + ConsoleColors.RESET);
 			return;
 		}
 	}
@@ -144,18 +152,22 @@ public class TrackerController {
 
 	public static void userSession(User user) {
 		
-		System.out.println("\nWelcome to your TV Show Tracker\n");
+		System.out.println(ConsoleColors.GREEN + ConsoleColors.ITALIC + "\nWelcome to your TV Show Tracker!\n" + ConsoleColors.RESET);
 		TVTrackerDaoSql.createList(currentUser);
 		System.out.println(ConsoleColors.CYAN_BOLD +"+---------------------+");
 		System.out.println("+----- Your Shows ----+");
 		System.out.println("+---------------------+\n" + ConsoleColors.RESET);
-		System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-20s %-10s\n", "Name", "Episodes Watched" + ConsoleColors.RESET);
-		for(int i = 0; i < currentUser.getList().size(); i++) {
-			System.out.printf("%-20s %-1d / %-1d\n",currentUser.getList().get(i).getName(), currentUser.getList().get(i).getEpisodesWatched(), currentUser.getList().get(i).getEpisodes());
+		if(user.getList().isEmpty()) {
+			System.out.println(ConsoleColors.ITALIC + "Currently not watching any shows" + ConsoleColors.RESET);
+		} else {
+			
+			System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-20s %-10s\n", "Name", "Episodes Watched" + ConsoleColors.RESET);
+			for(int i = 0; i < currentUser.getList().size(); i++) {
+				System.out.printf("%-20s %-1d / %-1d\n",currentUser.getList().get(i).getName(), currentUser.getList().get(i).getEpisodesWatched(), currentUser.getList().get(i).getEpisodes());
+			}
+			System.out.println();
+			System.out.println(ConsoleColors.WHITE_UNDERLINED + "                                     \n" + ConsoleColors.RESET);
 		}
-		System.out.println();
-//		System.out.println("--------------------------\n");
-		System.out.println(ConsoleColors.WHITE_UNDERLINED + "                                     \n" + ConsoleColors.RESET);
 
 		int option = 0;
 
@@ -205,7 +217,7 @@ public class TrackerController {
 			}
 			case 4: 
 			{
-				System.out.println("Goodbye!");
+				System.out.println(ConsoleColors.ITALIC + ConsoleColors.GREEN + "Goodbye!"+ ConsoleColors.RESET );
 				return;
 			}
 			default:
