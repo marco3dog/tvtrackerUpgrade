@@ -5,3 +5,5 @@ pom.properties
 .classpath
 pom.properties
 **/.DS_Store
+bin/
+target/
