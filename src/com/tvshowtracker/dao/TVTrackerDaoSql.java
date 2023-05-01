@@ -13,6 +13,7 @@ import com.tvshowtracker.connection.BetterConnectionManager;
 import com.tvshowtracker.model.Show;
 import com.tvshowtracker.model.User;
 import com.tvshowtracker.model.UserShow;
+import com.tvshowtracker.utils.ConsoleColors;
 
 public class TVTrackerDaoSql {
 
@@ -30,7 +31,7 @@ public class TVTrackerDaoSql {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println("User added!");
+		System.out.println( ConsoleColors.GREEN + "User added!" + ConsoleColors.RESET);
 	}
 	
 	public static void addShow(String name, int episodes) {
@@ -42,7 +43,7 @@ public class TVTrackerDaoSql {
 			ps.setString(1, name);
 			ps.setInt(2, episodes);
 			ps.execute();
-			System.out.println("Show added to master list!");
+			System.out.println(ConsoleColors.GREEN + "Show added to master list!" + ConsoleColors.RESET);
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -101,22 +102,40 @@ public class TVTrackerDaoSql {
 		}
 		// Checks if episodesWatched is greater than the amount of episodes the show has or less than 0
 		if (episodesWatched > totalEpisodes || episodesWatched < 0) {
-			System.out.println("Invalid amount of episodes watched. Please check your input and try again.");
+			System.out.println(ConsoleColors.RED + "Invalid amount of episodes watched. Please check your input and try again." + ConsoleColors.RESET);
 			return false;
 		}
 		try (Statement stmt = conn.createStatement()) {
 			int updated = stmt.executeUpdate("INSERT INTO user_shows values(" + user.getId() + ", " + showId + ", " + episodesWatched + ")");
 
 			if (updated != 0)
-				System.out.println("Show successfully added to list.");
+				System.out.println(ConsoleColors.GREEN + "Show successfully added to list." + ConsoleColors.RESET);
 			return true;
 
 		} catch (SQLException e) {
-			System.out.println("Show cannot be added to list. Try again.");
+			System.out.println(ConsoleColors.RED + "Show cannot be added to list. Try again." + ConsoleColors.RESET);
 			return false;
 		}
 	}
 	
+	public static int getAverageRatingForShow(int showId) {
+		String query = "select avg(rating) as 'avg_rating' from user_shows where showid = ? group by showid";
+
+		try (PreparedStatement ps = conn.prepareStatement(query)) {
+			ps.setInt(1, showId);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				int rating = rs.getInt("avg_rating");
+				return rating;
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return -1;
+	}
 	
 	// READ operations
 	public static User getUser(String username, String password) {
@@ -227,6 +246,28 @@ public class TVTrackerDaoSql {
 		return allShows;
 	}
 
+	public static int getUserRatingForShow(int userId, int showId) {
+		String query = "select rating "
+				+ "from user_shows us "
+				+ "join shows s on us.showid = s.showid "
+				+ "where us.userid = ? and us.showid = ?";
+
+		try (PreparedStatement ps = conn.prepareStatement(query)) {
+			ps.setInt(1, userId);
+			ps.setInt(2, showId);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				int rating = rs.getInt("rating");
+				return rating;
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return -1;
+	}
 	
 	
 	// UPDATE operations
@@ -274,7 +315,7 @@ public class TVTrackerDaoSql {
 		}
 		// Checks if episodesWatched is greater than the amount of episodes the show has or less than 0
 		if (episodesWatched > totalEpisodes || episodesWatched < 0) {
-			System.out.println("Invalid amount of episodes watched. Please check your input and try again.");
+			System.out.println(ConsoleColors.RED + "Invalid amount of episodes watched. Please check your input and try again." + ConsoleColors.RESET);
 			return false;
 		}
 		// If the value of episodesWatched is valid, then continue on with the method
@@ -283,17 +324,16 @@ public class TVTrackerDaoSql {
 			int updated = stmt.executeUpdate("UPDATE user_shows SET episodes = " + episodesWatched + " WHERE showid = " + showId + " AND userid = " + user.getId());
 
 			if (updated != 0)
-				System.out.println("List entry successfully updated.");
+				System.out.println(ConsoleColors.GREEN + "List entry successfully updated." + ConsoleColors.RESET);
 			return true;
 
 		} catch (SQLException e) {
-			System.out.println("List cannot be updated. Try again.");
+			System.out.println(ConsoleColors.RED + "List cannot be updated. Try again." + ConsoleColors.RESET);
 			return false;
 		}
 	}
-	
-	public static boolean updateShowRating(User user, int showId, int rating) {
 
+	public static boolean updateShowRating(User user, int showId, int rating) {
 		try (PreparedStatement pstmt = conn.prepareStatement(
 				"UPDATE user_shows SET rating = ? WHERE showid = ? AND userid = ?")
 				) {
@@ -307,12 +347,57 @@ public class TVTrackerDaoSql {
 				return true;
 		}
 		catch (SQLException e) {
-			System.out.println("Show rating could not be updated. Try again.");
+			System.out.println(ConsoleColors.RED + "Show rating could not be updated. Try again." + ConsoleColors.RESET);
 			return false;
 		}
 		return false;
 	}
 	
+
+	public static int getUsersWhoAreWatching(int showId) {
+		try(PreparedStatement pstmt = conn.prepareStatement(
+				"select COUNT(*) FROM user_shows WHERE showid = ?")
+				){
+			pstmt.setInt(1, showId);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				int watchers = rs.getInt("COUNT(*)");
+				rs.close();
+				return watchers;
+			}
+
+			else {
+				rs.close();
+				return 0;
+			}
+		}
+		catch(SQLException e) {
+			return 0;
+		}
+	}
+	
+	public static int getUsersWhoAreFinished(int showId) {
+		try(PreparedStatement pstmt = conn.prepareStatement(
+				"select COUNT(*) from user_shows us join shows s on us.showid = s.showid where us.episodes = s.episodes and us.showid = ?")
+				){
+			pstmt.setInt(1, showId);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				int watchers = rs.getInt("COUNT(*)");
+				rs.close();
+				return watchers;
+			}
+
+			else {
+				rs.close();
+				return 0;
+			}
+		}
+		catch(SQLException e) {
+			return 0;
+		}
+	}
+
 	
 	// DELETE operations
 	public static void deleteShow(int id) {
@@ -328,7 +413,6 @@ public class TVTrackerDaoSql {
 			e.printStackTrace();
 		}
 	}
-	
 	
 	// HELPER methods
 	public static User login(String username, String password) {
@@ -365,4 +449,5 @@ public class TVTrackerDaoSql {
 	}
 	
 	
+
 }
