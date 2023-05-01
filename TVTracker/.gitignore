@@ -1,0 +1,6 @@
+*.class
+*.jar
+config.properties
+.classpath
+**/.DS_Store
+

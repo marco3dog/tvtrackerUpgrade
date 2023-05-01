@@ -1,7 +1,9 @@
 package com.tvshowtracker.controller;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
+
 import com.tvshowtracker.dao.TVTrackerDaoSql;
 import com.tvshowtracker.model.Show;
 import com.tvshowtracker.model.User;
@@ -12,29 +14,130 @@ public class TrackerController {
 
 	private static User currentUser;
 
-
 	public static void run() {
-		System.out.println("Welcome to your TV Show Tracker");
-
+		
 		while (true) {
-			System.out.print("Username: ");
-			String username = ConsoleScanner.getString();
-			System.out.print("Password: ");
-			String password = ConsoleScanner.getString();
-			currentUser = TVTrackerDaoSql.login(username, password);
-
-			if (currentUser == null) {
-				System.out.println("Invalid credentials.");
+			
+			System.out.println("+---------------------+");
+			System.out.println("+------ Welcome ------+");
+			System.out.println("+---------------------+");
+			System.out.println("1. Create account");
+			System.out.println("2. Login");
+			System.out.println("3. Exit program");
+			System.out.print("Pick an option (1-3): ");
+			String choice = ConsoleScanner.getString();
+			
+			while (!choice.matches("^[1-3]$")) {
+				System.out.println("Not a valid choice.");
+				System.out.print("Pick an option (1-3): ");
+				choice = ConsoleScanner.getString();
+			}
+			
+			if (choice.equals("1")) {
+				
+				System.out.print("Enter a username: ");
+				String username = ConsoleScanner.getString();
+				System.out.println("Enter a password: ");
+				String password = ConsoleScanner.getString();
+				TVTrackerDaoSql.addUser(username, password);
+			}
+			
+			else if (choice.equals("2")) {
+				
+				while (true) {
+					
+					System.out.print("Username: ");
+					String username = ConsoleScanner.getString();
+					System.out.print("Password: ");
+					String password = ConsoleScanner.getString();
+					currentUser = TVTrackerDaoSql.login(username, password);
+					
+					while (currentUser == null) {
+						
+						System.out.println("Invalid credentials. Try again.");
+						System.out.print("Username: ");
+						username = ConsoleScanner.getString();
+						System.out.print("Password: ");
+						password = ConsoleScanner.getString();
+						currentUser = TVTrackerDaoSql.login(username, password);
+					}
+					
+					if (currentUser.getUserRole() == User.Role.ADMIN) {
+						adminSession(currentUser);
+						return;
+					}
+					else {
+						userSession(currentUser);
+						return;
+					}
+				}
 			}
 			else {
-				session();
+				System.out.println("Have a great day!");
 				return;
 			}
 		}
 	}
+		
+	public static void adminSession(User user) {
+		
+		System.out.println("+-----------------------+");
+		System.out.println("+----- ADMIN MENU ------+");
+		System.out.println("+-----------------------+");
+		System.out.println("1. Add a show to list");
+		System.out.println("2. Remove a show");
+		System.out.println("3. Edit show info");
+		System.out.println("4. Logout");
+		System.out.print("Choose an option (1-4): ");
+		String option = ConsoleScanner.getString();
+		
+		if (option.equals("1")) {
+			
+			System.out.print("Enter the name of the show you wish to add: ");
+			String showName = ConsoleScanner.getString();
+			System.out.print("How many episodes does it have?: ");
+			int episodes = ConsoleScanner.getInt();
+			TVTrackerDaoSql.addShow(showName, episodes);
+		}
+		
+		else if (option.equals("2")) {
+			
+			List<Show> allShows = TVTrackerDaoSql.getAllShows();
+			List<Integer> showIds = new ArrayList<>();
+			
+			for (Show show : allShows) {
+				showIds.add(show.getShowId());
+			}
+			
+			for (int i = 0; i < allShows.size(); i++) {
+				System.out.println(allShows.get(i).getShowId() + ": " + allShows.get(i).getName());
+			}
+			System.out.print("Enter the id of the show you want to delete: ");
+			int idChoice = ConsoleScanner.getInt();
+			
+			while (!showIds.contains(idChoice)) {
+				ConsoleScanner.getString();
+				System.out.println("That's not one of the available ids.");
+				System.out.print("Enter the id of the show you want to delete: ");
+				idChoice = ConsoleScanner.getInt();
+			}
+			TVTrackerDaoSql.deleteShow(idChoice);
+		}
+		
+		else if (option.equals("3")) {
+			
+		}
+		
+		else {
+			System.out.println("You're now logged out!");
+			return;
+		}
+	}
+	
 
-	public static void session() {
-
+	public static void userSession(User user) {
+		
+		System.out.println("Welcome to your TV Show Tracker");
 		TVTrackerDaoSql.createList(currentUser);
 		System.out.println("------------");
 		System.out.println("Your Shows:");
@@ -94,11 +197,12 @@ public class TrackerController {
 				System.out.println("Goodbye!");
 				return;
 			}
-			default: {
+			default:
+			{
 				continue;
 			}
+			
 			}
-
 		}
 	}
 

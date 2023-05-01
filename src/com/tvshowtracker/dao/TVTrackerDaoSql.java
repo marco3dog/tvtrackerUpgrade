@@ -44,8 +44,66 @@ public class TVTrackerDaoSql {
 		
 		return null;
 	}
-
-
+	
+	public static void addUser(String username, String password) {
+		
+		try (PreparedStatement ps = conn.prepareStatement("INSERT INTO user VALUES(null, ?, ?, 'USER');")) {
+			
+			ps.setString(1, username);
+			ps.setString(2, password);
+			ps.execute();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println("User added!");
+	}
+	
+	public static User getUser(String username, String password) {
+		
+		String getStmt = "SELECT * FROM user";
+		
+		try (PreparedStatement ps = conn.prepareStatement(getStmt);
+			 ResultSet rs = ps.executeQuery();) {
+			
+			while (rs.next()) {
+				
+				String usr = rs.getString("username");
+				String pass = rs.getString("password");
+				String role = rs.getString("Role");
+				
+				if (usr.equals(username) && pass.equals(password)) {
+					
+					if (role.equals("ADMIN"))
+						return new User(rs.getInt("userid"), usr, pass, User.Role.ADMIN);
+					else {
+						return new User(rs.getInt("userid"), usr, pass, User.Role.USER);
+					}
+				}
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static void addShow(String name, int episodes) {
+		
+		String insertStmt = "INSERT INTO shows VALUES(null, ?, ?);";
+		
+		try (PreparedStatement ps = conn.prepareStatement(insertStmt)) {
+			
+			ps.setString(1, name);
+			ps.setInt(2, episodes);
+			ps.execute();
+			System.out.println("Show added to master list!");
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static List<Show> getAllShows() {
 		List<Show> showList = new ArrayList<Show>();
 
@@ -146,24 +204,21 @@ public class TVTrackerDaoSql {
 		return false;
 	}
 
-	public static boolean deleteShow(int id) {
+	
+	public static void deleteShow(int id) {
 
 		try (PreparedStatement pstmt = conn.prepareStatement("DELETE FROM show WHERE showid = ?");) {
 
 			pstmt.setInt(1, id);
-
-			int updated = pstmt.executeUpdate();
-
-			if (updated == 1)
-				return true;
-		
+			pstmt.execute();
+			System.out.println("Show deleted!");
 		}
 		
 		catch (SQLException e) {
-			return false;
+			e.printStackTrace();
 		}
-		return false;
 	}
+	
 
 	public static boolean updateShow(String showName, int episodes) {
 
