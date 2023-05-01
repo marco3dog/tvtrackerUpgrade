@@ -1,5 +1,10 @@
 Manifest-Version: 1.0
+<<<<<<< HEAD
 Built-By: alber
 Build-Jdk: 19.0.1
+=======
+Built-By: jedik
+Build-Jdk: 17.0.6
+>>>>>>> a7080fd1fdc43904dc5f9978ead63b3db8ae5c3f
 Created-By: Maven Integration for Eclipse
 
