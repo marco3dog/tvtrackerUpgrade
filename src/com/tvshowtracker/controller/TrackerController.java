@@ -224,28 +224,28 @@ public class TrackerController {
 			System.out.println(ConsoleColors.YELLOW + ConsoleColors.ITALIC + "Currently not watching any shows\n" + ConsoleColors.RESET);
 		} else {
 			
-			System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-20s %-10s\n", "Name", "Episodes Watched" + ConsoleColors.RESET);
+			System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-20s %-20s %-8s\n", "Name", "Episodes Watched", "Your Rating" + ConsoleColors.RESET);
 			for(int i = 0; i < currentUser.getList().size(); i++) {
-				System.out.printf("%-20s %-1d / %-1d\n",currentUser.getList().get(i).getName(), currentUser.getList().get(i).getEpisodesWatched(), currentUser.getList().get(i).getEpisodes());
+				System.out.printf("%-20s %-1d / %-15d %-1d / %-1d\n",currentUser.getList().get(i).getName(), currentUser.getList().get(i).getEpisodesWatched(), 
+						currentUser.getList().get(i).getEpisodes(), currentUser.getList().get(i).getRating(), 5);
 			}
 			System.out.println();
 			System.out.println(ConsoleColors.WHITE_UNDERLINED + "                                     \n" + ConsoleColors.RESET);
 		}
 
 		int option = 0;
-
 		while(true) {
-			System.out.println(ConsoleColors.ITALIC + "Select an option by entering 1, 2, 3, or 4\n" + ConsoleColors.RESET);
+			System.out.println(ConsoleColors.ITALIC + "Select an option by entering 1, 2, 3, 4 or 5\n" + ConsoleColors.RESET);
 
 			System.out.println("1. Add a show.");
 			System.out.println("2. Update a show's progress.");
-			System.out.println("3. View all your shows.");
-			System.out.println("4. Exit.");
-
+			System.out.println("3. Rate a show.");
+			System.out.println("4. View all your shows.");
+			System.out.println("5. Exit.");
 
 			try {
 				option = ConsoleScanner.getInt();
-				if (option < 1 || option > 4) {
+				if (option < 1 || option > 5) {
 					throw new Exception();
 				}
 			}
@@ -279,10 +279,19 @@ public class TrackerController {
 			}
 			case 3: 
 			{
+				if(user.getList().isEmpty()) {
+					System.out.println(ConsoleColors.RED + "No shows to rate" + ConsoleColors.RESET);
+					break;
+				}
+				rateShow();
+				break;
+			}
+			case 4:
+			{
 				viewShows();
 				break;
 			}
-			case 4: 
+			case 5: 
 			{
 				System.out.println(ConsoleColors.ITALIC + ConsoleColors.GREEN + "Goodbye!"+ ConsoleColors.RESET );
 				return;
@@ -351,9 +360,10 @@ public class TrackerController {
 			}
 		}
 
+		int defaultRating = 0;
 		if (addedShow != null && success) {
 			temp.add(new UserShow(addedShow.getShowId(), addedShow.getName(), addedShow.getEpisodes(),
-					episodesWatched));
+					episodesWatched, defaultRating));
 			currentUser.setList(temp);
 		}
 	}
@@ -422,13 +432,64 @@ public class TrackerController {
 		System.out.println(ConsoleColors.CYAN_BOLD + "+---------------------+");
 		System.out.println("+----- Your Shows ----+");
 		System.out.println("+---------------------+\n" + ConsoleColors.RESET);
-		System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-20s %-10s\n", "Name", "Episodes Watched" + ConsoleColors.RESET);
+		System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-20s %-20s %-8s\n", "Name", "Episodes Watched", "Your Rating" + ConsoleColors.RESET);
 		for(int i = 0; i < currentUser.getList().size(); i++) {
-			System.out.printf("%-20s %-1d / %-1d\n",currentUser.getList().get(i).getName(), currentUser.getList().get(i).getEpisodesWatched(), currentUser.getList().get(i).getEpisodes());
-			System.out.println("        " + TVTrackerDaoSql.getUsersWhoAreWatching(currentUser.getList().get(i).getShowId()) + " user(s) are watching this show. " + TVTrackerDaoSql.getUsersWhoAreFinished(currentUser.getList().get(i).getShowId()) + " user(s) users have finished this show.");
+			System.out.printf("%-20s %-1d / %-15d %-1d / %-1d\n",currentUser.getList().get(i).getName(), currentUser.getList().get(i).getEpisodesWatched(), 
+					currentUser.getList().get(i).getEpisodes(), currentUser.getList().get(i).getRating(), 5);
 		}
 		System.out.println();
 		System.out.println(ConsoleColors.WHITE_UNDERLINED + "                                     \n" + ConsoleColors.RESET);
+	}
+	
+	public static void rateShow() {
+		System.out.println(ConsoleColors.ITALIC + "Which show would you like to rate?\n" + ConsoleColors.RESET);
+		boolean goodInput;
+		int menuOption = 0;
+		boolean success;
+		for(int i = 1; i <= currentUser.getList().size(); i++) {
+			System.out.println(i + ". " + currentUser.getList().get(i-1).getName() 
+					+ " - Current Rating: " + currentUser.getList().get(i-1).getRating());
+		}
+		do {
+			try {
+				menuOption = ConsoleScanner.getInt();
+				if(menuOption < 0 || menuOption > currentUser.getList().size()) {
+					throw new Exception();
+				}
+				goodInput = true;
+			}
+			catch (InputMismatchException e) {
+				System.out.println(ConsoleColors.RED + "Enter a number." + ConsoleColors.RESET);
+				goodInput = false;
+			}
+			catch(Exception e) {
+				System.out.println(ConsoleColors.RED + "Not a valid option" + ConsoleColors.RESET);
+				goodInput = false;
+			}
+		}
+		while(!goodInput);
+		System.out.println(ConsoleColors.ITALIC + "What rating do you give the show (1-5)?"+ ConsoleColors.RESET);
+		int rating = 0;
+		do {
+			try {
+				rating = ConsoleScanner.getInt();
+				goodInput = true;
+			}
+			catch (InputMismatchException e) {
+				System.out.println(ConsoleColors.RED + "Enter a number (1-5)."+ ConsoleColors.RESET);
+				goodInput = false;
+			}
+			catch(Exception e) {
+				System.out.println(ConsoleColors.RED + "Not a valid option"+ ConsoleColors.RESET);
+				goodInput = false;
+			}
+		}
+		while(!goodInput);
+		success = TVTrackerDaoSql.updateShowRating(currentUser, 
+				currentUser.getList().get(menuOption-1).getShowId(), rating);
+		if (success) {
+			currentUser.getList().get(menuOption - 1).setRating(rating);
+		}
 	}
 }
 
