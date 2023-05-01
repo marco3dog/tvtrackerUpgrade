@@ -17,35 +17,8 @@ import com.tvshowtracker.model.UserShow;
 public class TVTrackerDaoSql {
 
 	private static Connection conn = BetterConnectionManager.getConnection();
-
-	public static User login(String username, String password) {
-
-		try(PreparedStatement ps = conn.prepareStatement(
-				"SELECT * from user WHERE username = ? AND password = ?")){
-
-			ps.setString(1, username);
-			ps.setString(2, password);
-
-			User foundUser = null;
-			ResultSet rs = ps.executeQuery();
-
-			if (rs.next()) {
-
-				int accountId = rs.getInt("userid");
-				String accountUsername = rs.getString("username");
-				String accountPassword = rs.getString("password");
-				foundUser = new User(accountId, accountUsername, accountPassword);
-			}
-			rs.close();
-			return foundUser;
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
 	
+	// CREATE operations
 	public static void addUser(String username, String password) {
 		
 		try (PreparedStatement ps = conn.prepareStatement("INSERT INTO user VALUES(null, ?, ?, 'USER');")) {
@@ -58,35 +31,6 @@ public class TVTrackerDaoSql {
 			e.printStackTrace();
 		}
 		System.out.println("User added!");
-	}
-	
-	public static User getUser(String username, String password) {
-		
-		String getStmt = "SELECT * FROM user";
-		
-		try (PreparedStatement ps = conn.prepareStatement(getStmt);
-			 ResultSet rs = ps.executeQuery();) {
-			
-			while (rs.next()) {
-				
-				String usr = rs.getString("username");
-				String pass = rs.getString("password");
-				String role = rs.getString("Role");
-				
-				if (usr.equals(username) && pass.equals(password)) {
-					
-					if (role.equals("ADMIN"))
-						return new User(rs.getInt("userid"), usr, pass, User.Role.ADMIN);
-					else {
-						return new User(rs.getInt("userid"), usr, pass, User.Role.USER);
-					}
-				}
-			}
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
 	public static void addShow(String name, int episodes) {
@@ -105,87 +49,6 @@ public class TVTrackerDaoSql {
 		}
 	}
 	
-	public static List<Show> getAllShows() {
-		List<Show> showList = new ArrayList<Show>();
-
-		try (Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT * FROM shows");
-				) {
-			while (rs.next()) {
-
-				int showId = rs.getInt("showid");
-				String name = rs.getString("name");
-				int episodes = rs.getInt("episodes");
-
-				Show show = new Show(showId, name, episodes);
-				showList.add(show);
-			}
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return showList;
-	}
-
-	public static List<Show> displayShowsToAdd(User user) {
-
-		List<Show> allShows = new ArrayList<>();
-
-		String query = "select s.showid, s.name, s.episodes from " +
-				"shows s LEFT JOIN user_shows us on us.showid = s.showid " +
-				"and us.userid = ? where us.userid is null;";
-
-		try (PreparedStatement ps = conn.prepareStatement(query)) {
-
-			ps.setInt(1, user.getId());
-			ResultSet rs = ps.executeQuery();
-
-			while (rs.next()) {
-				int id = rs.getInt("showid");
-				String name = rs.getString("name");
-				int episodes = rs.getInt("episodes");
-				allShows.add(new Show(id, name, episodes));
-			}
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return allShows;
-	}
-
-
-
-	public static Optional<Show> getShowById(int id) {
-
-		try (PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM show WHERE showid = ?");) {
-			pstmt.setInt(1, id);
-
-			ResultSet rs = pstmt.executeQuery();
-
-			if (rs.next()) {
-				int showId = rs.getInt("showid");
-				String name = rs.getString("name");
-				int episodes = rs.getInt("episodes");
-
-				Show show = new Show(showId, name, episodes);
-				Optional<Show> foundShow = Optional.of(show);
-				rs.close();
-				return foundShow;
-			}
-
-			else {
-				rs.close();
-				return Optional.empty();
-			}
-		}
-
-		catch (SQLException e) {
-			return Optional.empty();
-		}
-	}
-
 	public static boolean createShow(String showName, int episodes) {
 
 		try (PreparedStatement pstmt = conn.prepareStatement("INSERT INTO show VALUES(null, name = ?, episodes = ?)");) {
@@ -204,43 +67,7 @@ public class TVTrackerDaoSql {
 		}
 		return false;
 	}
-
 	
-	public static void deleteShow(int id) {
-
-		try (PreparedStatement pstmt = conn.prepareStatement("DELETE FROM show WHERE showid = ?");) {
-
-			pstmt.setInt(1, id);
-			pstmt.execute();
-			System.out.println("Show deleted!");
-		}
-
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-
-	public static boolean updateShow(String showName, int episodes) {
-
-		try (PreparedStatement pstmt = conn.prepareStatement("UPDATE show SET name = ?, episodes = ?");) {
-
-			pstmt.setString(1, showName);
-			pstmt.setInt(2, episodes);
-
-			int updated = pstmt.executeUpdate();
-
-			if (updated == 1)
-				return true;
-
-		}
-
-		catch (SQLException e) {
-			return false;
-		}
-		return false;
-	}
-
 	public static void createList(User user){
 
 		try (Statement stmt = conn.createStatement();
@@ -257,7 +84,6 @@ public class TVTrackerDaoSql {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public static boolean addShowToList(User user, int showId, int episodesWatched) {
@@ -290,7 +116,187 @@ public class TVTrackerDaoSql {
 			return false;
 		}
 	}
+	
+	public static int getAverageRatingForShow(int showId) {
+		String query = "select avg(rating) as 'avg_rating' from user_shows where showid = ? group by showid";
 
+		try (PreparedStatement ps = conn.prepareStatement(query)) {
+			ps.setInt(1, showId);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				int rating = rs.getInt("avg_rating");
+				return rating;
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return -1;
+	}
+	
+	// READ operations
+	public static User getUser(String username, String password) {
+		
+		String getStmt = "SELECT * FROM user";
+		
+		try (PreparedStatement ps = conn.prepareStatement(getStmt);
+			 ResultSet rs = ps.executeQuery();) {
+			
+			while (rs.next()) {
+				
+				String usr = rs.getString("username");
+				String pass = rs.getString("password");
+				String role = rs.getString("Role");
+				
+				if (usr.equals(username) && pass.equals(password)) {
+					
+					if (role.equals("ADMIN"))
+						return new User(rs.getInt("userid"), usr, pass, User.Role.ADMIN);
+					else {
+						return new User(rs.getInt("userid"), usr, pass, User.Role.USER);
+					}
+				}
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static List<Show> getAllShows() {
+		List<Show> showList = new ArrayList<Show>();
+
+		try (Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT * FROM shows");
+				) {
+			while (rs.next()) {
+
+				int showId = rs.getInt("showid");
+				String name = rs.getString("name");
+				int episodes = rs.getInt("episodes");
+
+				Show show = new Show(showId, name, episodes);
+				showList.add(show);
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return showList;
+	}
+	
+	public static Optional<Show> getShowById(int id) {
+
+		try (PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM show WHERE showid = ?");) {
+			pstmt.setInt(1, id);
+
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				int showId = rs.getInt("showid");
+				String name = rs.getString("name");
+				int episodes = rs.getInt("episodes");
+
+				Show show = new Show(showId, name, episodes);
+				Optional<Show> foundShow = Optional.of(show);
+				rs.close();
+				return foundShow;
+			}
+
+			else {
+				rs.close();
+				return Optional.empty();
+			}
+		}
+
+		catch (SQLException e) {
+			return Optional.empty();
+		}
+	}
+	
+	public static List<Show> displayShowsToAdd(User user) {
+
+		List<Show> allShows = new ArrayList<>();
+
+		String query = "select s.showid, s.name, s.episodes from " +
+				"shows s LEFT JOIN user_shows us on us.showid = s.showid " +
+				"and us.userid = ? where us.userid is null;";
+
+		try (PreparedStatement ps = conn.prepareStatement(query)) {
+
+			ps.setInt(1, user.getId());
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				int id = rs.getInt("showid");
+				String name = rs.getString("name");
+				int episodes = rs.getInt("episodes");
+				allShows.add(new Show(id, name, episodes));
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return allShows;
+	}
+
+	public static int getUserRatingForShow(int userId, int showId) {
+		String query = "select rating "
+				+ "from user_shows us "
+				+ "join shows s on us.showid = s.showid "
+				+ "where us.userid = ? and us.showid = ?";
+
+		try (PreparedStatement ps = conn.prepareStatement(query)) {
+			ps.setInt(1, userId);
+			ps.setInt(2, showId);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				int rating = rs.getInt("rating");
+				return rating;
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return -1;
+	}
+	
+	
+	// UPDATE operations
+	public static void updateShow(String showName, int episodes) {
+
+		try (PreparedStatement pstmt = conn.prepareStatement("UPDATE shows SET episodes = ? WHERE name = ?")) {
+			
+			pstmt.setInt(1, episodes);
+			pstmt.setString(2, showName);
+			pstmt.execute();
+		}
+
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void updateShow(String oldName, String newName) {
+		
+		try (PreparedStatement ps = conn.prepareStatement("UPDATE shows SET name = ? WHERE name = ?;")) {
+			
+			ps.setString(1, newName);
+			ps.setString(2, oldName);
+			ps.execute();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static boolean updateShowInList(User user, int showId, int episodesWatched) {
 
 		// Get total amount of episodes the show has
@@ -325,48 +331,6 @@ public class TVTrackerDaoSql {
 			return false;
 		}
 	}
-	
-	public static int getUserRatingForShow(int userId, int showId) {
-		String query = "select rating "
-				+ "from user_shows us "
-				+ "join shows s on us.showid = s.showid "
-				+ "where us.userid = ? and us.showid = ?";
-
-		try (PreparedStatement ps = conn.prepareStatement(query)) {
-			ps.setInt(1, userId);
-			ps.setInt(2, showId);
-			ResultSet rs = ps.executeQuery();
-
-			if (rs.next()) {
-				int rating = rs.getInt("rating");
-				return rating;
-			}
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return -1;
-	}
-	
-	public static int getAverageRatingForShow(int showId) {
-		String query = "select avg(rating) as 'avg_rating' from user_shows where showid = ? group by showid";
-
-		try (PreparedStatement ps = conn.prepareStatement(query)) {
-			ps.setInt(1, showId);
-			ResultSet rs = ps.executeQuery();
-
-			if (rs.next()) {
-				int rating = rs.getInt("avg_rating");
-				return rating;
-			}
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return -1;
-	}
 
 	public static boolean updateShowRating(User user, int showId, int rating) {
 		try (PreparedStatement pstmt = conn.prepareStatement(
@@ -387,4 +351,56 @@ public class TVTrackerDaoSql {
 		}
 		return false;
 	}
+	
+	
+	// DELETE operations
+	public static void deleteShow(int id) {
+
+		try (PreparedStatement pstmt = conn.prepareStatement("DELETE FROM show WHERE showid = ?");) {
+
+			pstmt.setInt(1, id);
+			pstmt.execute();
+			System.out.println("Show deleted!");
+		}
+
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// HELPER methods
+	public static User login(String username, String password) {
+
+		try(PreparedStatement ps = conn.prepareStatement(
+				"SELECT * from user WHERE username = ? AND password = ?")){
+
+			ps.setString(1, username);
+			ps.setString(2, password);
+
+			User foundUser = null;
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+
+				int accountId = rs.getInt("userid");
+				String accountUsername = rs.getString("username");
+				String accountPassword = rs.getString("password");
+				String role = rs.getString("Role");
+				
+				if (role.equals("USER"))
+					foundUser = new User(accountId, accountUsername, accountPassword);
+				else
+					foundUser = new User(accountId, accountUsername, accountPassword, User.Role.ADMIN);
+			}
+			rs.close();
+			return foundUser;
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	
 }

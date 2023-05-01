@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import com.tvshowtracker.dao.TVTrackerDaoSql;
-import com.tvshowtracker.model.Show;
 import com.tvshowtracker.model.User;
 
 class UserRatingTests {
