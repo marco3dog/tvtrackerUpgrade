@@ -1,7 +1,6 @@
 *.class
 *.jar
 config.properties
-pom.properties
 .classpath
 pom.properties
 **/.DS_Store
