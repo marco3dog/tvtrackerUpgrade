@@ -3,9 +3,9 @@ package com.tvshowtracker.model;
 import java.util.ArrayList;
 import java.util.List;
 
-enum Role {ADMIN, USER};
-
 public class User {
+	
+	public enum Role {ADMIN, USER};
 	
 	private int id;
 	private String name;
@@ -20,6 +20,15 @@ public class User {
 		this.password = password;
 		this.list = new ArrayList<UserShow>();
 		this.userRole = Role.USER;
+	}
+	
+	public User(int id, String name, String password, Role userRole) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.password = password;
+		this.list = new ArrayList<UserShow>();
+		this.userRole = userRole;
 	}
 	
 	public int getId() {
