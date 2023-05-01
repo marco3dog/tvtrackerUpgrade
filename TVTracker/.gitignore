@@ -1,0 +1,10 @@
+*.class
+*.jar
+config.properties
+pom.properties
+.classpath
+**/.DS_Store
+.settings/
+bin/
+target/
+
