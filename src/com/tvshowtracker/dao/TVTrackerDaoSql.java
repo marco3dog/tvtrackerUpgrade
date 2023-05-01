@@ -13,6 +13,7 @@ import com.tvshowtracker.connection.BetterConnectionManager;
 import com.tvshowtracker.model.Show;
 import com.tvshowtracker.model.User;
 import com.tvshowtracker.model.UserShow;
+import com.tvshowtracker.utils.ConsoleColors;
 
 public class TVTrackerDaoSql {
 
@@ -57,7 +58,7 @@ public class TVTrackerDaoSql {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println("User added!");
+		System.out.println( ConsoleColors.GREEN + "User added!" + ConsoleColors.RESET);
 	}
 	
 	public static User getUser(String username, String password) {
@@ -98,7 +99,7 @@ public class TVTrackerDaoSql {
 			ps.setString(1, name);
 			ps.setInt(2, episodes);
 			ps.execute();
-			System.out.println("Show added to master list!");
+			System.out.println(ConsoleColors.GREEN + "Show added to master list!" + ConsoleColors.RESET);
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -212,7 +213,7 @@ public class TVTrackerDaoSql {
 
 			pstmt.setInt(1, id);
 			pstmt.execute();
-			System.out.println("Show deleted!");
+			System.out.println(ConsoleColors.GREEN + "Show deleted!" + ConsoleColors.RESET);
 		}
 
 		catch (SQLException e) {
@@ -275,18 +276,18 @@ public class TVTrackerDaoSql {
 		}
 		// Checks if episodesWatched is greater than the amount of episodes the show has or less than 0
 		if (episodesWatched > totalEpisodes || episodesWatched < 0) {
-			System.out.println("Invalid amount of episodes watched. Please check your input and try again.");
+			System.out.println(ConsoleColors.RED + "Invalid amount of episodes watched. Please check your input and try again." + ConsoleColors.RESET);
 			return false;
 		}
 		try (Statement stmt = conn.createStatement()) {
 			int updated = stmt.executeUpdate("INSERT INTO user_shows values(" + user.getId() + ", " + showId + ", " + episodesWatched + ")");
 
 			if (updated != 0)
-				System.out.println("Show successfully added to list.");
+				System.out.println(ConsoleColors.GREEN + "Show successfully added to list." + ConsoleColors.RESET);
 			return true;
 
 		} catch (SQLException e) {
-			System.out.println("Show cannot be added to list. Try again.");
+			System.out.println(ConsoleColors.RED + "Show cannot be added to list. Try again." + ConsoleColors.RESET);
 			return false;
 		}
 	}
@@ -308,7 +309,7 @@ public class TVTrackerDaoSql {
 		}
 		// Checks if episodesWatched is greater than the amount of episodes the show has or less than 0
 		if (episodesWatched > totalEpisodes || episodesWatched < 0) {
-			System.out.println("Invalid amount of episodes watched. Please check your input and try again.");
+			System.out.println(ConsoleColors.RED + "Invalid amount of episodes watched. Please check your input and try again." + ConsoleColors.RESET);
 			return false;
 		}
 		// If the value of episodesWatched is valid, then continue on with the method
@@ -317,11 +318,11 @@ public class TVTrackerDaoSql {
 			int updated = stmt.executeUpdate("UPDATE user_shows SET episodes = " + episodesWatched + " WHERE showid = " + showId + " AND userid = " + user.getId());
 
 			if (updated != 0)
-				System.out.println("List entry successfully updated.");
+				System.out.println(ConsoleColors.GREEN + "List entry successfully updated." + ConsoleColors.RESET);
 			return true;
 
 		} catch (SQLException e) {
-			System.out.println("List cannot be updated. Try again.");
+			System.out.println(ConsoleColors.RED + "List cannot be updated. Try again." + ConsoleColors.RESET);
 			return false;
 		}
 	}
@@ -341,7 +342,7 @@ public class TVTrackerDaoSql {
 				return true;
 		}
 		catch (SQLException e) {
-			System.out.println("Show rating could not be updated. Try again.");
+			System.out.println(ConsoleColors.RED + "Show rating could not be updated. Try again." + ConsoleColors.RESET);
 			return false;
 		}
 		return false;
