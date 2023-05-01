@@ -158,7 +158,7 @@ public class TrackerController {
 		System.out.println("+----- Your Shows ----+");
 		System.out.println("+---------------------+\n" + ConsoleColors.RESET);
 		if(user.getList().isEmpty()) {
-			System.out.println(ConsoleColors.ITALIC + "Currently not watching any shows" + ConsoleColors.RESET);
+			System.out.println(ConsoleColors.YELLOW + ConsoleColors.ITALIC + "Currently not watching any shows\n" + ConsoleColors.RESET);
 		} else {
 			
 			System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-20s %-10s\n", "Name", "Episodes Watched" + ConsoleColors.RESET);
@@ -207,6 +207,10 @@ public class TrackerController {
 			}
 			case 2: 
 			{
+				if(user.getList().isEmpty()) {
+					System.out.println(ConsoleColors.RED + "No shows to update" + ConsoleColors.RESET);
+					break;
+				}
 				updateShow();
 				break;
 			}
