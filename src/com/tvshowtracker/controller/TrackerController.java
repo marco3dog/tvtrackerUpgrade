@@ -126,6 +126,40 @@ public class TrackerController {
 		
 		else if (option.equals("3")) {
 			
+			List<Show> allShows = TVTrackerDaoSql.getAllShows();
+			List<Integer> showIds = new ArrayList<>();
+			for (Show show : allShows) {
+				showIds.add(show.getShowId());
+			}
+			
+			for (int i = 0; i < allShows.size(); i++) {
+				System.out.println(allShows.get(i).getShowId() + ": " + allShows.get(i).getName());
+			}
+			System.out.print("Enter the id of the show you want to edit: ");
+			int idChoice = ConsoleScanner.getInt();
+			while (!showIds.contains(idChoice)) {
+				ConsoleScanner.getString();
+				System.out.println("That's not one of the available ids.");
+				System.out.print("Enter the id of the show you want to edit: ");
+				idChoice = ConsoleScanner.getInt();
+			}
+			
+			System.out.print("What did you want to edit (1 - episode count or 2 - name): ");
+			String op = ConsoleScanner.getString();
+			
+			while (!op.matches("^[1-2]$")) {
+				System.out.println("Not a valid choice.");
+				System.out.print("What did you want to edit (1 - episode count or 2 - name): ");
+				op = ConsoleScanner.getString();
+			}
+			
+			if (op.equals("1")) {
+				System.out.print();
+			}
+			else if (op.equals("2")) {
+				
+			}
+			
 		}
 		
 		else {
