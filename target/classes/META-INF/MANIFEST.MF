@@ -1,5 +1,4 @@
-Manifest-Version: 1.0
-Built-By: Jo
-Build-Jdk: 19.0.2
+Built-By: Marco
+Build-Jdk: 17.0.6
 Created-By: Maven Integration for Eclipse
 
