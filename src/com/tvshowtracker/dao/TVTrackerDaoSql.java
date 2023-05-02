@@ -404,7 +404,7 @@ public class TVTrackerDaoSql {
 	// DELETE operations
 	public static void deleteShow(int id) {
 
-		try (PreparedStatement pstmt = conn.prepareStatement("DELETE FROM show WHERE showid = ?");) {
+		try (PreparedStatement pstmt = conn.prepareStatement("DELETE FROM shows WHERE showid = ?");) {
 
 			pstmt.setInt(1, id);
 			pstmt.execute();
