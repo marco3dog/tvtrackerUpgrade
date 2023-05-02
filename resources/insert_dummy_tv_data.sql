@@ -21,29 +21,21 @@ insert into user values(null, 'sheen', 'ultralord', "ADMIN");
 
 select * from user;
 
-insert into user_shows values (1, 1, 12, 5);
-insert into user_shows values (2, 7, 42, 5);
-insert into user_shows values (3, 9, 17, 5);
-insert into user_shows values (4, 2, 44, 5);
-insert into user_shows values (5, 9, 60, 5);
-insert into user_shows values (1, 5, 8, 5);
+insert into user_shows values (1, 1, 12);
+insert into user_shows values (2, 7, 42);
+insert into user_shows values (3, 9, 17);
+insert into user_shows values (4, 2, 44);
+insert into user_shows values (5, 9, 60);
+insert into user_shows values (1, 5, 8);
 
 select * from user_shows;
 
-SELECT 
-    s.name, us.episodes, s.episodes
-FROM
-    user_shows us
-        JOIN
-    user u ON us.userid = u.userid
-        JOIN
-    shows s ON us.showid = s.showid
-WHERE
-    us.userid = 1;
+SELECT s.name, us.episodes, s.episodes FROM user_shows us JOIN user u ON us.userid = u.userid JOIN shows s ON us.showid = s.showid WHERE us.userid = 1;
 SELECT s.showid, s.name, us.episodes, s.episodes FROM user_shows us JOIN user u ON us.userid = u.userid JOIN shows s ON us.showid = s.showid WHERE us.userid = 1;	
-SELECT 
-    userid
-FROM
-    user
-WHERE
-    username = 'sheen';
+select userid from user where username = 'sheen';
+
+select * from shows;
+-- This query selects the shows that the user has not currently added 
+select s.showid, s.name, s.episodes from shows s LEFT JOIN user_shows us on us.showid = s.showid and us.userid = 1 where us.userid is null;
+-- Displays the shows that the user is currently watching 
+select s.showid, s.name, s.episodes from shows s LEFT JOIN user_shows us on us.showid = s.showid where us.userid = 1;
