@@ -45,12 +45,13 @@ public class TrackerController {
 					String username = ConsoleScanner.getString();
 					System.out.print("Enter a password: ");
 					String password = ConsoleScanner.getString();
-					if(TVTrackerDaoSql.getUser(username,password) != null) {
+					
+					if (TVTrackerDaoSql.getUser(username,password) != null) 
 						System.out.println(ConsoleColors.RED + "Username already taken" + ConsoleColors.RESET);
-					} else {
+					
+					else
 						TVTrackerDaoSql.addUser(username, password);
 						break;
-					}
 				}
 			}
 			
@@ -195,6 +196,7 @@ public class TrackerController {
 					TVTrackerDaoSql.updateShow(showName, episodeCount);
 					System.out.println(showName + " now has " + episodeCount + " episodes!");
 				}
+				
 				else if (op.equals("2")) {
 					
 					System.out.print("What is the new name for the show: ");
@@ -441,7 +443,7 @@ public class TrackerController {
 
 			System.out.println("        " + TVTrackerDaoSql.getUsersWhoAreWatching(currentUser.getList().get(i).getShowId()) 
 			+ " user(s) are watching this show. " + TVTrackerDaoSql.getUsersWhoAreFinished(currentUser.getList().get(i).getShowId()) 
-			+ " user(s) users have finished this show.");
+			+ " user(s) have finished this show.");
 			System.out.println("        " + "The average rating for this show is " 
 			+ TVTrackerDaoSql.getAverageRatingForShow(currentUser.getList().get(i).getShowId()) + " / 5.\n");
 

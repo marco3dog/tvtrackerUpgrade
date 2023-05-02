@@ -120,24 +120,7 @@ public class TVTrackerDaoSql {
 		}
 	}
 	
-	public static int getAverageRatingForShow(int showId) {
-		String query = "select avg(rating) as 'avg_rating' from user_shows where showid = ? group by showid";
-
-		try (PreparedStatement ps = conn.prepareStatement(query)) {
-			ps.setInt(1, showId);
-			ResultSet rs = ps.executeQuery();
-
-			if (rs.next()) {
-				int rating = rs.getInt("avg_rating");
-				return rating;
-			}
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return -1;
-	}
+	
 	
 	// READ operations
 	public static User getUser(String username, String password) {
@@ -271,6 +254,102 @@ public class TVTrackerDaoSql {
 		return -1;
 	}
 	
+	public static int getAverageRatingForShow(int showId) {
+		String query = "select avg(rating) as 'avg_rating' from user_shows where showid = ? group by showid";
+
+		try (PreparedStatement ps = conn.prepareStatement(query)) {
+			ps.setInt(1, showId);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				int rating = rs.getInt("avg_rating");
+				return rating;
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return -1;
+	}
+	
+	public static int getUsersWhoAreWatching(int showId) {
+		try(PreparedStatement pstmt = conn.prepareStatement(
+				"select COUNT(*) FROM user_shows WHERE showid = ?")
+				){
+			pstmt.setInt(1, showId);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				int watchers = rs.getInt("COUNT(*)");
+				rs.close();
+				return watchers - getUsersWhoAreFinished(showId);
+			}
+
+			else {
+				rs.close();
+				return 0;
+			}
+		}
+		catch(SQLException e) {
+			return 0;
+		}
+	}
+	
+	public static int getUsersWhoAreFinished(int showId) {
+		try(PreparedStatement pstmt = conn.prepareStatement(
+				"select COUNT(*) from user_shows us join shows s on us.showid = s.showid where us.episodes = s.episodes and us.showid = ?")
+				){
+			pstmt.setInt(1, showId);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				int watchers = rs.getInt("COUNT(*)");
+				rs.close();
+				return watchers;
+			}
+
+			else {
+				rs.close();
+				return 0;
+			}
+		}
+		catch(SQLException e) {
+			return 0;
+		}
+	}
+	
+	public static User login(String username, String password) {
+
+		try(PreparedStatement ps = conn.prepareStatement(
+				"SELECT * from user WHERE username = ? AND password = ?")){
+
+			ps.setString(1, username);
+			ps.setString(2, password);
+
+			User foundUser = null;
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+
+				int accountId = rs.getInt("userid");
+				String accountUsername = rs.getString("username");
+				String accountPassword = rs.getString("password");
+				String role = rs.getString("Role");
+				
+				if (role.equals("USER"))
+					foundUser = new User(accountId, accountUsername, accountPassword);
+				else
+					foundUser = new User(accountId, accountUsername, accountPassword, User.Role.ADMIN);
+			}
+			rs.close();
+			return foundUser;
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
 	
 	// UPDATE operations
 	public static void updateShow(String showName, int episodes) {
@@ -356,55 +435,11 @@ public class TVTrackerDaoSql {
 	}
 	
 
-	public static int getUsersWhoAreWatching(int showId) {
-		try(PreparedStatement pstmt = conn.prepareStatement(
-				"select COUNT(*) FROM user_shows WHERE showid = ?")
-				){
-			pstmt.setInt(1, showId);
-			ResultSet rs = pstmt.executeQuery();
-			if (rs.next()) {
-				int watchers = rs.getInt("COUNT(*)");
-				rs.close();
-				return watchers;
-			}
-
-			else {
-				rs.close();
-				return 0;
-			}
-		}
-		catch(SQLException e) {
-			return 0;
-		}
-	}
-	
-	public static int getUsersWhoAreFinished(int showId) {
-		try(PreparedStatement pstmt = conn.prepareStatement(
-				"select COUNT(*) from user_shows us join shows s on us.showid = s.showid where us.episodes = s.episodes and us.showid = ?")
-				){
-			pstmt.setInt(1, showId);
-			ResultSet rs = pstmt.executeQuery();
-			if (rs.next()) {
-				int watchers = rs.getInt("COUNT(*)");
-				rs.close();
-				return watchers;
-			}
-
-			else {
-				rs.close();
-				return 0;
-			}
-		}
-		catch(SQLException e) {
-			return 0;
-		}
-	}
-
 	
 	// DELETE operations
 	public static void deleteShow(int id) {
 
-		try (PreparedStatement pstmt = conn.prepareStatement("DELETE FROM show WHERE showid = ?");) {
+		try (PreparedStatement pstmt = conn.prepareStatement("DELETE FROM shows WHERE showid = ?");) {
 
 			pstmt.setInt(1, id);
 			pstmt.execute();
@@ -416,40 +451,4 @@ public class TVTrackerDaoSql {
 		}
 	}
 	
-	// HELPER methods
-	public static User login(String username, String password) {
-
-		try(PreparedStatement ps = conn.prepareStatement(
-				"SELECT * from user WHERE username = ? AND password = ?")){
-
-			ps.setString(1, username);
-			ps.setString(2, password);
-
-			User foundUser = null;
-			ResultSet rs = ps.executeQuery();
-
-			if (rs.next()) {
-
-				int accountId = rs.getInt("userid");
-				String accountUsername = rs.getString("username");
-				String accountPassword = rs.getString("password");
-				String role = rs.getString("Role");
-				
-				if (role.equals("USER"))
-					foundUser = new User(accountId, accountUsername, accountPassword);
-				else
-					foundUser = new User(accountId, accountUsername, accountPassword, User.Role.ADMIN);
-			}
-			rs.close();
-			return foundUser;
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-	
-	
-
 }
