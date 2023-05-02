@@ -21,7 +21,7 @@ public class TrackerController {
 			
 			System.out.println(ConsoleColors.CYAN_BOLD + "+---------------------+");
 			System.out.println("+------ Welcome ------+");
-			System.out.println("+---------------------+\n" + ConsoleColors.RESET);
+			System.out.println("+---------------------+" + ConsoleColors.RESET);
 			System.out.println("1. Create account");
 			System.out.println("2. Login");
 			System.out.println("3. Exit program\n");
@@ -33,6 +33,7 @@ public class TrackerController {
 				System.out.print(ConsoleColors.ITALIC + "Choose an option (1-3): "+ ConsoleColors.RESET);
 				choice = ConsoleScanner.getString();
 			}
+			System.out.println();
 			
 			if (choice.equals("1")) {
 				
@@ -43,8 +44,21 @@ public class TrackerController {
 					System.out.println("+---------------------+\n" + ConsoleColors.RESET);
 					System.out.print("Enter a username: ");
 					String username = ConsoleScanner.getString();
+					
+					while (!username.matches("^\\w+$")) {
+						System.out.println("Not a valid username.");
+						System.out.print("Enter a username: ");
+						username = ConsoleScanner.getString();
+					}
+					
 					System.out.print("Enter a password: ");
 					String password = ConsoleScanner.getString();
+					
+					while (!password.matches("^.{1,}$")) {
+						System.out.println("Not a valid password.");
+						System.out.print("Enter a password: ");
+						password = ConsoleScanner.getString();
+					}
 					
 					if (TVTrackerDaoSql.getUser(username,password) != null) 
 						System.out.println(ConsoleColors.RED + "Username already taken" + ConsoleColors.RESET);
@@ -224,7 +238,9 @@ public class TrackerController {
 		System.out.println("+---------------------+\n" + ConsoleColors.RESET);
 		if(user.getList().isEmpty()) {
 			System.out.println(ConsoleColors.YELLOW + ConsoleColors.ITALIC + "Currently not watching any shows\n" + ConsoleColors.RESET);
-		} else {
+		}
+		
+		else {
 			
 			System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-20s %-20s %-8s\n", "Name", "Episodes Watched", "Your Rating" + ConsoleColors.RESET);
 			for(int i = 0; i < currentUser.getList().size(); i++) {
@@ -239,13 +255,13 @@ public class TrackerController {
 
 		int option = 0;
 		while(true) {
-			System.out.println(ConsoleColors.ITALIC + "Select an option by entering 1, 2, 3, 4 or 5\n" + ConsoleColors.RESET);
 
 			System.out.println("1. Add a show.");
 			System.out.println("2. Update a show's progress.");
 			System.out.println("3. Rate a show.");
 			System.out.println("4. View all your shows.");
 			System.out.println("5. Exit.");
+			System.out.print(ConsoleColors.ITALIC + "Choose an option (1-5): " + ConsoleColors.RESET);
 
 			try {
 				option = ConsoleScanner.getInt();
@@ -297,7 +313,7 @@ public class TrackerController {
 			}
 			case 5: 
 			{
-				System.out.println(ConsoleColors.ITALIC + ConsoleColors.GREEN + "Goodbye!"+ ConsoleColors.RESET );
+				System.out.println(ConsoleColors.ITALIC + ConsoleColors.GREEN + "Goodbye!\n"+ ConsoleColors.RESET );
 				return;
 			}
 			default:

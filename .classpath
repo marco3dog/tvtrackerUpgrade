@@ -12,12 +12,24 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/jedik/OneDrive/Desktop/Cognixia/JARS/mysql-connector-j-8.0.31.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+<<<<<<< HEAD
 	<classpathentry kind="lib" path="resources/jars/mysql-connector-j-8.0.31.jar"/>
+=======
+<<<<<<< HEAD
+=======
+	<classpathentry kind="lib" path="C:/Old_JUMPlus_Workspace/TvTrackerUpgrade/resources/jars/mysql-connector-j-8.0.31.jar"/>
+>>>>>>> a48b7711fce15f8d6b207f31c4ef73b6eef70340
+>>>>>>> d52df3dea4ad04df7459a2c688cfd106eb1ef129
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
