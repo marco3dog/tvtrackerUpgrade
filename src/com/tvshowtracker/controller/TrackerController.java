@@ -228,8 +228,10 @@ public class TrackerController {
 			
 			System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-20s %-20s %-8s\n", "Name", "Episodes Watched", "Your Rating" + ConsoleColors.RESET);
 			for(int i = 0; i < currentUser.getList().size(); i++) {
-				System.out.printf("%-20s %-1d / %-15d %-1d / %-1d\n",currentUser.getList().get(i).getName(), currentUser.getList().get(i).getEpisodesWatched(), 
-						currentUser.getList().get(i).getEpisodes(), currentUser.getList().get(i).getRating(), 5);
+				int rating = currentUser.getList().get(i).getRating();
+				String ratingToDisplay = rating <= 0 ? "N/A" : Integer.toString(rating)  + " / 5";
+				System.out.printf("%-20s %-1d / %-15d %s\n",currentUser.getList().get(i).getName(), currentUser.getList().get(i).getEpisodesWatched(), 
+						currentUser.getList().get(i).getEpisodes(), ratingToDisplay);
 			}
 			System.out.println();
 			System.out.println(ConsoleColors.WHITE_UNDERLINED + "                                     \n" + ConsoleColors.RESET);
@@ -438,14 +440,18 @@ public class TrackerController {
 		System.out.println("+---------------------+\n" + ConsoleColors.RESET);
 		System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-20s %-20s %-8s\n", "Name", "Episodes Watched", "Your Rating" + ConsoleColors.RESET);
 		for(int i = 0; i < currentUser.getList().size(); i++) {
-			System.out.printf("%-20s %-1d / %-15d %-1d / %-1d\n",currentUser.getList().get(i).getName(), currentUser.getList().get(i).getEpisodesWatched(), 
-					currentUser.getList().get(i).getEpisodes(), currentUser.getList().get(i).getRating(), 5);
+			int rating = currentUser.getList().get(i).getRating();
+			String ratingToDisplay = rating <= 0 ? "N/A" : Integer.toString(rating) + " / 5";
+			System.out.printf("%-20s %-1d / %-15d %s\n",currentUser.getList().get(i).getName(), currentUser.getList().get(i).getEpisodesWatched(), 
+					currentUser.getList().get(i).getEpisodes(), ratingToDisplay);
 
 			System.out.println("        " + TVTrackerDaoSql.getUsersWhoAreWatching(currentUser.getList().get(i).getShowId()) 
 			+ " user(s) are watching this show. " + TVTrackerDaoSql.getUsersWhoAreFinished(currentUser.getList().get(i).getShowId()) 
 			+ " user(s) have finished this show.");
-			System.out.println("        " + "The average rating for this show is " 
-			+ TVTrackerDaoSql.getAverageRatingForShow(currentUser.getList().get(i).getShowId()) + " / 5.\n");
+			
+			int avgRating = TVTrackerDaoSql.getAverageRatingForShow(currentUser.getList().get(i).getShowId());
+			String avgRatingToDisplay = (avgRating <= 0) ? "N/A" : Integer.toString(avgRating)  + " / 5";
+			System.out.println("        " + "The average rating for this show is " + avgRatingToDisplay + "\n");
 
 		}
 		System.out.println(ConsoleColors.WHITE_UNDERLINED + "                                    \n" + ConsoleColors.RESET);
@@ -457,8 +463,10 @@ public class TrackerController {
 		int menuOption = 0;
 		boolean success;
 		for(int i = 1; i <= currentUser.getList().size(); i++) {
+			int rating = currentUser.getList().get(i-1).getRating();
+			String ratingToDisplay = rating <= 0 ? "N/A" : Integer.toString(rating)  + " / 5";
 			System.out.println(i + ". " + currentUser.getList().get(i-1).getName() 
-					+ " - Current Rating: " + currentUser.getList().get(i-1).getRating());
+					+ " - Current Rating: " + ratingToDisplay);
 		}
 		do {
 			try {
@@ -483,6 +491,9 @@ public class TrackerController {
 		do {
 			try {
 				rating = ConsoleScanner.getInt();
+				if (rating < 1 || rating > 5) {
+					throw new Exception();
+				}
 				goodInput = true;
 			}
 			catch (InputMismatchException e) {
