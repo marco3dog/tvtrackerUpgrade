@@ -280,6 +280,7 @@ public class TrackerController {
 				option = 0;
 				continue;
 			}
+			System.out.println();
 
 			switch(option) {
 
@@ -326,8 +327,9 @@ public class TrackerController {
 	}
 
 	public static void addShow() {
-		System.out.println(ConsoleColors.ITALIC + "Enter the Show ID of the show you want to add\n" + ConsoleColors.RESET);
+		System.out.println();
 		displayShowsToAdd();
+		System.out.print(ConsoleColors.ITALIC + "Enter the Show ID of the show you want to add: " + ConsoleColors.RESET);
 
 		boolean goodInput;
 		int showId = 0;
@@ -349,7 +351,7 @@ public class TrackerController {
 
 
 		while(!goodInput);
-		System.out.println(ConsoleColors.ITALIC + "How many episodes have you seen?" + ConsoleColors.RESET);
+		System.out.print(ConsoleColors.ITALIC + "How many episodes have you seen: " + ConsoleColors.RESET);
 		do {
 			try {
 				episodesWatched = ConsoleScanner.getInt();
@@ -367,6 +369,7 @@ public class TrackerController {
 
 
 		while(!goodInput);
+		System.out.println();
 		boolean success = TVTrackerDaoSql.addShowToList(currentUser, showId, episodesWatched);
 		List<UserShow> temp = currentUser.getList();
 		List<Show> listOfShows = TVTrackerDaoSql.getAllShows();
@@ -399,13 +402,13 @@ public class TrackerController {
 	}
 
 	public static void updateShow() {
-		System.out.println(ConsoleColors.ITALIC + "Which show would you like to update?\n" + ConsoleColors.RESET);
 		boolean goodInput;
 		int menuOption = 0;
 		boolean success;
 		for(int i = 1; i <= currentUser.getList().size(); i++) {
 			System.out.println(i + ". " + currentUser.getList().get(i-1).getShortenedName());
 		}
+		System.out.print(ConsoleColors.ITALIC + "Enter the id of the show you'd like to update: " + ConsoleColors.RESET);
 		do {
 			try {
 				menuOption = ConsoleScanner.getInt();
@@ -416,16 +419,19 @@ public class TrackerController {
 			}
 			catch (InputMismatchException e) {
 				System.out.println(ConsoleColors.RED + "Enter a number." + ConsoleColors.RESET);
+				System.out.print(ConsoleColors.ITALIC + "Enter the id of the show you'd like to update: " + ConsoleColors.RESET);
 				ConsoleScanner.getString();
 				goodInput = false;
 			}
 			catch(Exception e) {
 				System.out.println(ConsoleColors.RED + "Not a valid option" + ConsoleColors.RESET);
+				System.out.print(ConsoleColors.ITALIC + "Enter the id of the show you'd like to update: " + ConsoleColors.RESET);
 				goodInput = false;
 			}
 		}
 		while(!goodInput);
-		System.out.println(ConsoleColors.ITALIC + "How many episodes have you seen?"+ ConsoleColors.RESET);
+		
+		System.out.print(ConsoleColors.ITALIC + "How many episodes have you seen: " + ConsoleColors.RESET);
 		int numberOfEpisodesEntered = 0;
 		do {
 			try {
@@ -434,15 +440,18 @@ public class TrackerController {
 			}
 			catch (InputMismatchException e) {
 				System.out.println(ConsoleColors.RED + "Enter a number."+ ConsoleColors.RESET);
+				System.out.print(ConsoleColors.ITALIC + "How many episodes have you seen: " + ConsoleColors.RESET);
 				ConsoleScanner.getString();
 				goodInput = false;
 			}
 			catch(Exception e) {
 				System.out.println(ConsoleColors.RED + "Not a valid option"+ ConsoleColors.RESET);
+				System.out.print(ConsoleColors.ITALIC + "How many episodes have you seen: " + ConsoleColors.RESET);
 				goodInput = false;
 			}
 		}
 		while(!goodInput);
+		System.out.println();
 		success = TVTrackerDaoSql.updateShowInList(currentUser, 
 				currentUser.getList().get(menuOption-1).getShowId(), numberOfEpisodesEntered);
 		if (success) {
@@ -474,7 +483,7 @@ public class TrackerController {
 	}
 	
 	public static void rateShow() {
-		System.out.println(ConsoleColors.ITALIC + "Which show would you like to rate?\n" + ConsoleColors.RESET);
+
 		boolean goodInput;
 		int menuOption = 0;
 		boolean success;
@@ -484,6 +493,7 @@ public class TrackerController {
 			System.out.println(i + ". " + currentUser.getList().get(i-1).getShortenedName() 
 					+ " - Current Rating: " + ratingToDisplay);
 		}
+		System.out.print(ConsoleColors.ITALIC + "Which show would you like to rate: " + ConsoleColors.RESET);
 		do {
 			try {
 				menuOption = ConsoleScanner.getInt();
@@ -494,15 +504,19 @@ public class TrackerController {
 			}
 			catch (InputMismatchException e) {
 				System.out.println(ConsoleColors.RED + "Enter a number." + ConsoleColors.RESET);
+				System.out.print(ConsoleColors.ITALIC + "Which show would you like to rate: " + ConsoleColors.RESET);
+				ConsoleScanner.getString();
 				goodInput = false;
 			}
 			catch(Exception e) {
 				System.out.println(ConsoleColors.RED + "Not a valid option" + ConsoleColors.RESET);
+				System.out.print(ConsoleColors.ITALIC + "Which show would you like to rate: " + ConsoleColors.RESET);
+				ConsoleScanner.getString();
 				goodInput = false;
 			}
 		}
 		while(!goodInput);
-		System.out.println(ConsoleColors.ITALIC + "What rating do you give the show (1-5)?"+ ConsoleColors.RESET);
+		System.out.print(ConsoleColors.ITALIC + "What rating do you give the show (1-5): "+ ConsoleColors.RESET);
 		int rating = 0;
 		do {
 			try {
@@ -514,10 +528,12 @@ public class TrackerController {
 			}
 			catch (InputMismatchException e) {
 				System.out.println(ConsoleColors.RED + "Enter a number (1-5)."+ ConsoleColors.RESET);
+				System.out.print(ConsoleColors.ITALIC + "What rating do you give the show (1-5): "+ ConsoleColors.RESET);
 				goodInput = false;
 			}
 			catch(Exception e) {
 				System.out.println(ConsoleColors.RED + "Not a valid option"+ ConsoleColors.RESET);
+				System.out.print(ConsoleColors.ITALIC + "What rating do you give the show (1-5): "+ ConsoleColors.RESET);
 				goodInput = false;
 			}
 		}
