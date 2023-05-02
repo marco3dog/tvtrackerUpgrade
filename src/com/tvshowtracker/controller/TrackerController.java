@@ -133,7 +133,7 @@ public class TrackerController {
 				}
 				
 				for (int i = 0; i < allShows.size(); i++) {
-					System.out.println(allShows.get(i).getShowId() + ": " + allShows.get(i).getName());
+					System.out.println(allShows.get(i).getShowId() + ": " + allShows.get(i).getShortenedName());
 				}
 				System.out.print("Enter the id of the show you want to delete: ");
 				int idChoice = ConsoleScanner.getInt();
@@ -157,7 +157,7 @@ public class TrackerController {
 				}
 				
 				for (int i = 0; i < allShows.size(); i++) {
-					System.out.println(allShows.get(i).getShowId() + ": " + allShows.get(i).getName());
+					System.out.println(allShows.get(i).getShowId() + ": " + allShows.get(i).getShortenedName());
 				}
 				System.out.print("Enter the id of the show you want to edit: ");
 				int idChoice = ConsoleScanner.getInt();
@@ -228,7 +228,7 @@ public class TrackerController {
 			
 			System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-20s %-20s %-8s\n", "Name", "Episodes Watched", "Your Rating" + ConsoleColors.RESET);
 			for(int i = 0; i < currentUser.getList().size(); i++) {
-				System.out.printf("%-20s %-1d / %-15d %-1d / %-1d\n",currentUser.getList().get(i).getName(), currentUser.getList().get(i).getEpisodesWatched(), 
+				System.out.printf("%-20s %-1d / %-15d %-1d / %-1d\n",currentUser.getList().get(i).getShortenedName(), currentUser.getList().get(i).getEpisodesWatched(), 
 						currentUser.getList().get(i).getEpisodes(), currentUser.getList().get(i).getRating(), 5);
 			}
 			System.out.println();
@@ -376,7 +376,7 @@ public class TrackerController {
 		}
 		System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-10s %-20s %-10s\n", "Show ID", "Name", "Total Episodes" + ConsoleColors.RESET);
 		for(int i = 0; i < arr.size(); i++) {
-			System.out.printf("%-10d %-20s %-10d\n", arr.get(i).getShowId(), arr.get(i).getName(), arr.get(i).getEpisodes());
+			System.out.printf("%-10d %-20s %-10d\n", arr.get(i).getShowId(), arr.get(i).getShortenedName(), arr.get(i).getEpisodes());
 		}
 	}
 
@@ -386,7 +386,7 @@ public class TrackerController {
 		int menuOption = 0;
 		boolean success;
 		for(int i = 1; i <= currentUser.getList().size(); i++) {
-			System.out.println(i + ". " + currentUser.getList().get(i-1).getName());
+			System.out.println(i + ". " + currentUser.getList().get(i-1).getShortenedName());
 		}
 		do {
 			try {
@@ -438,7 +438,7 @@ public class TrackerController {
 		System.out.println("+---------------------+\n" + ConsoleColors.RESET);
 		System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-20s %-20s %-8s\n", "Name", "Episodes Watched", "Your Rating" + ConsoleColors.RESET);
 		for(int i = 0; i < currentUser.getList().size(); i++) {
-			System.out.printf("%-20s %-1d / %-15d %-1d / %-1d\n",currentUser.getList().get(i).getName(), currentUser.getList().get(i).getEpisodesWatched(), 
+			System.out.printf("%-20s %-1d / %-15d %-1d / %-1d\n",currentUser.getList().get(i).getShortenedName(), currentUser.getList().get(i).getEpisodesWatched(), 
 					currentUser.getList().get(i).getEpisodes(), currentUser.getList().get(i).getRating(), 5);
 
 			System.out.println("        " + TVTrackerDaoSql.getUsersWhoAreWatching(currentUser.getList().get(i).getShowId()) 
@@ -457,7 +457,7 @@ public class TrackerController {
 		int menuOption = 0;
 		boolean success;
 		for(int i = 1; i <= currentUser.getList().size(); i++) {
-			System.out.println(i + ". " + currentUser.getList().get(i-1).getName() 
+			System.out.println(i + ". " + currentUser.getList().get(i-1).getShortenedName() 
 					+ " - Current Rating: " + currentUser.getList().get(i-1).getRating());
 		}
 		do {
