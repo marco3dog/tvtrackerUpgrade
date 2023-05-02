@@ -319,7 +319,6 @@ public class TrackerController {
 			}
 			catch (InputMismatchException e) {
 				System.out.println(ConsoleColors.RED + "Enter a number." + ConsoleColors.RESET);
-				ConsoleScanner.getString();
 				goodInput = false;
 			}
 			catch(Exception e) {
@@ -338,7 +337,6 @@ public class TrackerController {
 			}
 			catch (InputMismatchException e) {
 				System.out.println(ConsoleColors.RED + "Enter a number." + ConsoleColors.RESET);
-				ConsoleScanner.getString();
 				goodInput = false;
 			}
 			catch(Exception e) {
@@ -440,11 +438,15 @@ public class TrackerController {
 		for(int i = 0; i < currentUser.getList().size(); i++) {
 			System.out.printf("%-20s %-1d / %-15d %-1d / %-1d\n",currentUser.getList().get(i).getName(), currentUser.getList().get(i).getEpisodesWatched(), 
 					currentUser.getList().get(i).getEpisodes(), currentUser.getList().get(i).getRating(), 5);
-			System.out.println("        " + TVTrackerDaoSql.getUsersWhoAreWatching(currentUser.getList().get(i).getShowId()) + " user(s) are watching this show. " + TVTrackerDaoSql.getUsersWhoAreFinished(currentUser.getList().get(i).getShowId()) + " user(s) users have finished this show.");
+
+			System.out.println("        " + TVTrackerDaoSql.getUsersWhoAreWatching(currentUser.getList().get(i).getShowId()) 
+			+ " user(s) are watching this show. " + TVTrackerDaoSql.getUsersWhoAreFinished(currentUser.getList().get(i).getShowId()) 
+			+ " user(s) users have finished this show.");
+			System.out.println("        " + "The average rating for this show is " 
+			+ TVTrackerDaoSql.getAverageRatingForShow(currentUser.getList().get(i).getShowId()) + " / 5.\n");
 
 		}
-		System.out.println();
-		System.out.println(ConsoleColors.WHITE_UNDERLINED + "                                     \n" + ConsoleColors.RESET);
+		System.out.println(ConsoleColors.WHITE_UNDERLINED + "                                    \n" + ConsoleColors.RESET);
 	}
 	
 	public static void rateShow() {
