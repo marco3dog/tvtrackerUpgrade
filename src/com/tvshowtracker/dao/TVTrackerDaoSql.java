@@ -72,14 +72,15 @@ public class TVTrackerDaoSql {
 	public static void createList(User user){
 
 		try (Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT s.showid, s.name, us.episodes, s.episodes FROM user_shows us JOIN user u ON us.userid = u.userid JOIN shows s ON us.showid = s.showid WHERE us.userid = " + user.getId());
+				ResultSet rs = stmt.executeQuery("SELECT us.rating, s.showid, s.name, us.episodes, s.episodes FROM user_shows us JOIN user u ON us.userid = u.userid JOIN shows s ON us.showid = s.showid WHERE us.userid = " + user.getId());
 				) {
 			while (rs.next()) {
 				int id = rs.getInt("showid");
 				String name = rs.getString("name");
 				int episodesWatched = rs.getInt("us.episodes");
 				int episodesTotal = rs.getInt("s.episodes");
-				UserShow show = new UserShow(id, name, episodesTotal, episodesWatched);
+				int rating = rs.getInt("rating");
+				UserShow show = new UserShow(id, name, episodesTotal, episodesWatched, rating);
 				user.getList().add(show);
 			}
 		} catch (SQLException e) {
@@ -106,7 +107,8 @@ public class TVTrackerDaoSql {
 			return false;
 		}
 		try (Statement stmt = conn.createStatement()) {
-			int updated = stmt.executeUpdate("INSERT INTO user_shows values(" + user.getId() + ", " + showId + ", " + episodesWatched + ")");
+			int updated = stmt.executeUpdate("INSERT INTO user_shows values(" + user.getId() + ", " + showId + ", " + episodesWatched 
+					+ ", 0)");
 
 			if (updated != 0)
 				System.out.println(ConsoleColors.GREEN + "Show successfully added to list." + ConsoleColors.RESET);
