@@ -370,6 +370,10 @@ public class TrackerController {
 
 	public static void displayShowsToAdd() {
 		List<Show> arr = TVTrackerDaoSql.displayShowsToAdd(currentUser);
+		if(arr.size() == 0) {
+			System.out.println(ConsoleColors.YELLOW + ConsoleColors.ITALIC + "No more shows to add.");
+			return;
+		}
 		System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-10s %-20s %-10s\n", "Show ID", "Name", "Total Episodes" + ConsoleColors.RESET);
 		for(int i = 0; i < arr.size(); i++) {
 			System.out.printf("%-10d %-20s %-10d\n", arr.get(i).getShowId(), arr.get(i).getName(), arr.get(i).getEpisodes());
@@ -436,6 +440,8 @@ public class TrackerController {
 		for(int i = 0; i < currentUser.getList().size(); i++) {
 			System.out.printf("%-20s %-1d / %-15d %-1d / %-1d\n",currentUser.getList().get(i).getName(), currentUser.getList().get(i).getEpisodesWatched(), 
 					currentUser.getList().get(i).getEpisodes(), currentUser.getList().get(i).getRating(), 5);
+			System.out.println("        " + TVTrackerDaoSql.getUsersWhoAreWatching(currentUser.getList().get(i).getShowId()) + " user(s) are watching this show. " + TVTrackerDaoSql.getUsersWhoAreFinished(currentUser.getList().get(i).getShowId()) + " user(s) users have finished this show.");
+
 		}
 		System.out.println();
 		System.out.println(ConsoleColors.WHITE_UNDERLINED + "                                     \n" + ConsoleColors.RESET);

@@ -17,7 +17,11 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+<<<<<<< Updated upstream
 	<classpathentry kind="lib" path="C:/Old_JUMPlus_Workspace/TvTrackerUpgrade/resources/jars/mysql-connector-j-8.0.31.jar"/>
+=======
+	<classpathentry kind="lib" path="C:/Java_Workplace/tvtrackerUpgrade/resources/jars/mysql-connector-j-8.0.31.jar"/>
+>>>>>>> Stashed changes
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
