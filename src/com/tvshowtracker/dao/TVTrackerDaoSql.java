@@ -282,7 +282,7 @@ public class TVTrackerDaoSql {
 			if (rs.next()) {
 				int watchers = rs.getInt("COUNT(*)");
 				rs.close();
-				return watchers;
+				return watchers - getUsersWhoAreFinished(showId);
 			}
 
 			else {

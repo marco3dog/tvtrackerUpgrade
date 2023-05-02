@@ -438,7 +438,7 @@ public class TrackerController {
 					currentUser.getList().get(i).getEpisodes(), currentUser.getList().get(i).getRating(), 5);
 			System.out.println("        " + TVTrackerDaoSql.getUsersWhoAreWatching(currentUser.getList().get(i).getShowId()) 
 			+ " user(s) are watching this show. " + TVTrackerDaoSql.getUsersWhoAreFinished(currentUser.getList().get(i).getShowId()) 
-			+ " user(s) users have finished this show.");
+			+ " user(s) have finished this show.");
 			System.out.println("        " + "The average rating for this show is " 
 			+ TVTrackerDaoSql.getAverageRatingForShow(currentUser.getList().get(i).getShowId()) + " / 5.\n");
 		}
