@@ -33,3 +33,9 @@ select * from user_shows;
 SELECT s.name, us.episodes, s.episodes FROM user_shows us JOIN user u ON us.userid = u.userid JOIN shows s ON us.showid = s.showid WHERE us.userid = 1;
 SELECT s.showid, s.name, us.episodes, s.episodes FROM user_shows us JOIN user u ON us.userid = u.userid JOIN shows s ON us.showid = s.showid WHERE us.userid = 1;	
 select userid from user where username = 'sheen';
+
+select * from shows;
+-- This query selects the shows that the user has not currently added 
+select s.showid, s.name, s.episodes from shows s LEFT JOIN user_shows us on us.showid = s.showid and us.userid = 1 where us.userid is null;
+-- Displays the shows that the user is currently watching 
+select s.showid, s.name, s.episodes from shows s LEFT JOIN user_shows us on us.showid = s.showid where us.userid = 1;
