@@ -31,7 +31,7 @@ public class TVTrackerDaoSql {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println( ConsoleColors.GREEN + "User added!" + ConsoleColors.RESET);
+		System.out.println( ConsoleColors.GREEN + "User added!\n" + ConsoleColors.RESET);
 	}
 	
 	public static void addShow(String name, int episodes) {
@@ -435,7 +435,6 @@ public class TVTrackerDaoSql {
 	}
 	
 
-	
 	// DELETE operations
 	public static void deleteShow(int id) {
 

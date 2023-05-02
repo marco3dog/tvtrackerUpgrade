@@ -21,12 +21,12 @@ insert into user values(null, 'sheen', 'ultralord', "ADMIN");
 
 select * from user;
 
-insert into user_shows values (1, 1, 12);
-insert into user_shows values (2, 7, 42);
-insert into user_shows values (3, 9, 17);
-insert into user_shows values (4, 2, 44);
-insert into user_shows values (5, 9, 60);
-insert into user_shows values (1, 5, 8);
+insert into user_shows values (1, 1, 12, 3);
+insert into user_shows values (2, 7, 42, 4);
+insert into user_shows values (3, 9, 17, 5);
+insert into user_shows values (4, 2, 44, 5);
+insert into user_shows values (5, 9, 60, 1);
+insert into user_shows values (1, 5, 8, 2);
 
 select * from user_shows;
 
