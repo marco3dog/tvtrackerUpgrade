@@ -6,4 +6,4 @@ pom.properties
 **/.DS_Store
 .settings/
 bin/
-target/
+*/target/*
