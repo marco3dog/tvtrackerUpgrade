@@ -39,5 +39,9 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+<<<<<<< HEAD
+=======
+	<classpathentry kind="lib" path="C:/Old_JUMPlus_Workspace/TvTrackerUpgrade/resources/jars/mysql-connector-j-8.0.31.jar"/>
+>>>>>>> a48b7711fce15f8d6b207f31c4ef73b6eef70340
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
