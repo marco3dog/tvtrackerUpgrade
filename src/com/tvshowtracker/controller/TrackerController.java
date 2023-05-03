@@ -476,6 +476,7 @@ public class TrackerController {
 					episodesWatched, ratingToDisplay);
 			System.out.println();
 
+			
 			System.out.println("        " + TVTrackerDaoSql.getUsersWhoAreWatching(currentUser.getList().get(i).getShowId()) 
 			+ " user(s) are watching this show. " + TVTrackerDaoSql.getUsersWhoAreFinished(currentUser.getList().get(i).getShowId()) 
 			+ " user(s) have finished this show.");
