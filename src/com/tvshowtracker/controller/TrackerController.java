@@ -470,6 +470,8 @@ public class TrackerController {
 		for(int i = 0; i < currentUser.getList().size(); i++) {
 			int rating = currentUser.getList().get(i).getRating();
 			String ratingToDisplay = rating <= 0 ? "N/A" : Integer.toString(rating) + " / 5";
+			
+			// Store episodes watched in variable
 			String episodesWatched = currentUser.getList().get(i).getEpisodesWatched() + " / " + currentUser.getList().get(i).getEpisodes();
 			
 			System.out.printf("%-20s %-20s %s\n", currentUser.getList().get(i).getShortenedName(), 
