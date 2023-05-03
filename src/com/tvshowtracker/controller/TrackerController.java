@@ -160,6 +160,7 @@ public class TrackerController {
 					System.out.print(ConsoleColors.ITALIC + "Enter the id of the show you want to delete: " + ConsoleColors.RESET);
 					idChoice = ConsoleScanner.getInt();
 				}
+				TVTrackerDaoSql.deleteUserShow(idChoice);
 				TVTrackerDaoSql.deleteShow(idChoice);
 			}
 			
@@ -495,20 +496,6 @@ public class TrackerController {
 					avgRatingToDisplay, 
 					TVTrackerDaoSql.getUsersWhoAreWatching(currentUser.getList().get(i).getShowId()),
 					TVTrackerDaoSql.getUsersWhoAreFinished(currentUser.getList().get(i).getShowId()));
-			
-//			System.out.printf("%-20s %-20s %s\n", currentUser.getList().get(i).getShortenedName(), 
-//					episodesWatched, ratingToDisplay);
-
-			
-//			System.out.println("        " + TVTrackerDaoSql.getUsersWhoAreWatching(currentUser.getList().get(i).getShowId()) 
-//			+ " user(s) are watching this show. " + TVTrackerDaoSql.getUsersWhoAreFinished(currentUser.getList().get(i).getShowId()) 
-//			+ " user(s) have finished this show.");
-			
-//			int avgRating = TVTrackerDaoSql.getAverageRatingForShow(currentUser.getList().get(i).getShowId());
-//			String avgRatingToDisplay = (avgRating <= 0) ? "N/A" : Integer.toString(avgRating)  + " / 5";
-//			System.out.println("        " + "The average rating for this show is " + avgRatingToDisplay + "\n");
-
-//			System.out.println();
 		}
 		System.out.println(ConsoleColors.WHITE_UNDERLINED + "                                    \n" + ConsoleColors.RESET);
 	}
