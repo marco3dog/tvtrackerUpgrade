@@ -436,6 +436,22 @@ public class TVTrackerDaoSql {
 	
 
 	// DELETE operations
+	
+	public static void deleteUserShow(int showId) {
+		
+		try (PreparedStatement pstmt = conn.prepareStatement("delete from user_shows where showid = ?;");) {
+
+			pstmt.setInt(1, showId);
+			pstmt.execute();
+//			System.out.println(ConsoleColors.GREEN + "Show deleted!" + ConsoleColors.RESET);
+		}
+
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	public static void deleteShow(int id) {
 
 		try (PreparedStatement pstmt = conn.prepareStatement("DELETE FROM shows WHERE showid = ?");) {
