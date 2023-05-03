@@ -31,7 +31,7 @@ public class TVTrackerDaoSql {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println( ConsoleColors.GREEN + "User added!" + ConsoleColors.RESET);
+		System.out.println( ConsoleColors.GREEN + "User added!\n" + ConsoleColors.RESET);
 	}
 	
 	public static void addShow(String name, int episodes) {
@@ -111,7 +111,7 @@ public class TVTrackerDaoSql {
 					+ ", 0)");
 
 			if (updated != 0)
-				System.out.println(ConsoleColors.GREEN + "Show successfully added to list." + ConsoleColors.RESET);
+				System.out.println(ConsoleColors.GREEN + "Show successfully added to list.\n" + ConsoleColors.RESET);
 			return true;
 
 		} catch (SQLException e) {
@@ -405,7 +405,7 @@ public class TVTrackerDaoSql {
 			int updated = stmt.executeUpdate("UPDATE user_shows SET episodes = " + episodesWatched + " WHERE showid = " + showId + " AND userid = " + user.getId());
 
 			if (updated != 0)
-				System.out.println(ConsoleColors.GREEN + "List entry successfully updated." + ConsoleColors.RESET);
+				System.out.println(ConsoleColors.GREEN + "List entry successfully updated.\n" + ConsoleColors.RESET);
 			return true;
 
 		} catch (SQLException e) {
@@ -435,7 +435,6 @@ public class TVTrackerDaoSql {
 	}
 	
 
-	
 	// DELETE operations
 	public static void deleteShow(int id) {
 

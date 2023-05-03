@@ -24,6 +24,17 @@ public class Show {
 	public String getName() {
 		return name;
 	}
+	
+	public String getShortenedName() {
+		if (this.name.length() > 15) {
+			String shortenedName = name.substring(0, 15);
+			shortenedName += "...";
+			return shortenedName;
+		}
+		else {
+			return name;
+		}
+	}
 
 	public void setName(String name) {
 		this.name = name;
