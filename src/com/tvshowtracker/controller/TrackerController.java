@@ -228,7 +228,6 @@ public class TrackerController {
 		}
 	}
 	
-
 	public static void userSession(User user) {
 		
 		System.out.println(ConsoleColors.GREEN + ConsoleColors.ITALIC + "\nWelcome to your TV Show Tracker!\n" + ConsoleColors.RESET);
