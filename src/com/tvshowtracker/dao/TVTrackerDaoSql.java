@@ -121,7 +121,6 @@ public class TVTrackerDaoSql {
 	}
 	
 	
-	
 	// READ operations
 	public static User getUser(String username, String password) {
 		
@@ -436,7 +435,6 @@ public class TVTrackerDaoSql {
 	
 
 	// DELETE operations
-	
 	public static void deleteUserShow(int showId) {
 		
 		try (PreparedStatement pstmt = conn.prepareStatement("delete from user_shows where showid = ?;");) {
@@ -450,7 +448,6 @@ public class TVTrackerDaoSql {
 			e.printStackTrace();
 		}
 	}
-	
 	
 	public static void deleteShow(int id) {
 
