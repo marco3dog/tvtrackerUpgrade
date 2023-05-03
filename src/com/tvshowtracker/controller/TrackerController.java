@@ -112,26 +112,27 @@ public class TrackerController {
 	public static void adminSession(User user) {
 		
 		while (true) {
-			System.out.println("+-----------------------+");
-			System.out.println("+----- ADMIN MENU ------+");
-			System.out.println("+-----------------------+");
+			System.out.println(ConsoleColors.CYAN_BOLD + "\n+---------------------+");
+			System.out.println("+---- ADMIN MENU -----+");
+			System.out.println("+---------------------+" + ConsoleColors.RESET);
 			System.out.println("1. Add a show to list");
 			System.out.println("2. Remove a show");
 			System.out.println("3. Edit show info");
-			System.out.println("4. Logout");
-			System.out.print("Choose an option (1-4): ");
+			System.out.println("4. Logout\n");
+			System.out.print(ConsoleColors.ITALIC + "Choose an option (1-4): " + ConsoleColors.RESET);
 			String option = ConsoleScanner.getString();
+			System.out.println();
 			
 			if (option.equals("1")) {
 				
-				System.out.print("Enter the name of the show you wish to add: ");
+				System.out.print(ConsoleColors.ITALIC + "Enter the name of the show you wish to add: " + ConsoleColors.RESET);
 				String showName = ConsoleScanner.getString();
-				System.out.print("How many episodes does it have?: ");
+				System.out.print(ConsoleColors.ITALIC + "How many episodes does it have?: "+ ConsoleColors.RESET);
 				String episodes = ConsoleScanner.getString();
 				
 				while (!episodes.matches("^\\d+$")) {
-					System.out.println("Not valid numeric input.");
-					System.out.print("How many episodes does it have?: ");
+					System.out.println(ConsoleColors.RED + "Not valid numeric input." + ConsoleColors.RESET);
+					System.out.print(ConsoleColors.ITALIC + "How many episodes does it have?: " + ConsoleColors.RESET);
 					episodes = ConsoleScanner.getString();
 				}
 				TVTrackerDaoSql.addShow(showName, Integer.parseInt(episodes));
@@ -149,13 +150,14 @@ public class TrackerController {
 				for (int i = 0; i < allShows.size(); i++) {
 					System.out.println(allShows.get(i).getShowId() + ": " + allShows.get(i).getShortenedName());
 				}
-				System.out.print("Enter the id of the show you want to delete: ");
+				System.out.println();
+				System.out.print(ConsoleColors.ITALIC + "Enter the id of the show you want to delete: " + ConsoleColors.RESET);
 				int idChoice = ConsoleScanner.getInt();
 				
 				while (!showIds.contains(idChoice)) {
 					ConsoleScanner.getString();
-					System.out.println("That's not one of the available ids.");
-					System.out.print("Enter the id of the show you want to delete: ");
+					System.out.println(ConsoleColors.RED + "That's not one of the available ids." + ConsoleColors.RESET);
+					System.out.print(ConsoleColors.ITALIC + "Enter the id of the show you want to delete: " + ConsoleColors.RESET);
 					idChoice = ConsoleScanner.getInt();
 				}
 				TVTrackerDaoSql.deleteShow(idChoice);
@@ -173,12 +175,13 @@ public class TrackerController {
 				for (int i = 0; i < allShows.size(); i++) {
 					System.out.println(allShows.get(i).getShowId() + ": " + allShows.get(i).getShortenedName());
 				}
-				System.out.print("Enter the id of the show you want to edit: ");
+				System.out.println();
+				System.out.print(ConsoleColors.ITALIC + "Enter the id of the show you want to edit: " + ConsoleColors.RESET);
 				int idChoice = ConsoleScanner.getInt();
 				while (!showIds.contains(idChoice)) {
 					ConsoleScanner.getString();
-					System.out.println("That's not one of the available ids.");
-					System.out.print("Enter the id of the show you want to edit: ");
+					System.out.println(ConsoleColors.RED + "That's not one of the available ids." + ConsoleColors.RESET);
+					System.out.print(ConsoleColors.ITALIC + "Enter the id of the show you want to edit: " + ConsoleColors.RESET);
 					idChoice = ConsoleScanner.getInt();
 				}
 				
@@ -188,41 +191,41 @@ public class TrackerController {
 					}
 				}
 				
-				System.out.print("What did you want to edit (1 - episode count or 2 - name): ");
+				System.out.print(ConsoleColors.ITALIC + "What did you want to edit (1 - episode count or 2 - name): " + ConsoleColors.RESET);
 				String op = ConsoleScanner.getString();
 				
 				while (!op.matches("^[1-2]$")) {
-					System.out.println("Not a valid choice.");
-					System.out.print("What did you want to edit (1 - episode count or 2 - name): ");
+					System.out.println(ConsoleColors.RED + "Not a valid choice." + ConsoleColors.RESET);
+					System.out.print(ConsoleColors.ITALIC + "What did you want to edit (1 - episode count or 2 - name): " + ConsoleColors.RESET);
 					op = ConsoleScanner.getString();
 				}
 				
 				if (op.equals("1")) {
-					System.out.print("How many episodes for this show are able to be watched now: ");
+					System.out.print(ConsoleColors.ITALIC + "How many episodes for this show are able to be watched now: " + ConsoleColors.RESET);
 					String amount = ConsoleScanner.getString();
 					
 					while (!amount.matches("^\\d+$")) {
-						System.out.println("Not a valid numeric input.");
-						System.out.print("How many episodes for this show are able to be watched now: ");
+						System.out.println(ConsoleColors.RED + "Not a valid numeric input." + ConsoleColors.RESET);
+						System.out.print(ConsoleColors.ITALIC + "How many episodes for this show are able to be watched now: " + ConsoleColors.RESET);
 						amount = ConsoleScanner.getString();
 					}
 					int episodeCount = Integer.parseInt(amount);
 					TVTrackerDaoSql.updateShow(showName, episodeCount);
-					System.out.println(showName + " now has " + episodeCount + " episodes!");
+					System.out.println(ConsoleColors.GREEN + showName + " now has " + episodeCount + " episodes!" + ConsoleColors.RESET);
 				}
 				
 				else if (op.equals("2")) {
 					
-					System.out.print("What is the new name for the show: ");
+					System.out.print(ConsoleColors.ITALIC + "What is the new name for the show: " + ConsoleColors.RESET);
 					String newName = ConsoleScanner.getString();
 					TVTrackerDaoSql.updateShow(showName, newName);
-					System.out.println(showName + " is now renamed to " + newName + "!");
+					System.out.println(ConsoleColors.GREEN + showName + " is now renamed to " + newName + "!" + ConsoleColors.RESET);
 				}
 				
 			}
 			
 			else if (option.equals("4")) {
-				System.out.println("You're now logged out!");
+				System.out.println(ConsoleColors.GREEN + "You're now logged out!" + ConsoleColors.RESET);
 				return;
 			}
 		}
@@ -329,8 +332,11 @@ public class TrackerController {
 
 	public static void addShow() {
 		System.out.println();
-		displayShowsToAdd();
-
+		boolean showsToAdd = displayShowsToAdd();
+		if(showsToAdd != true) {
+			return;
+		}
+		
 		boolean goodInput;
 		int showId = 0;
 		int episodesWatched = 0;
@@ -392,25 +398,30 @@ public class TrackerController {
 		}
 	}
 
-	public static void displayShowsToAdd() {
+	public static boolean displayShowsToAdd() {
 		List<Show> arr = TVTrackerDaoSql.displayShowsToAdd(currentUser);
 		if(arr.size() == 0) {
-			System.out.println(ConsoleColors.YELLOW + ConsoleColors.ITALIC + "No more shows to add.");
-			return;
+			System.out.println(ConsoleColors.YELLOW + ConsoleColors.ITALIC + "No more shows to add." + ConsoleColors.RESET);
+			return false;
 		}
 		System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-10s %-20s %-10s\n", "Show ID", "Name", "Total Episodes" + ConsoleColors.RESET);
 		for(int i = 0; i < arr.size(); i++) {
 			System.out.printf("%-10d %-20s %-10d\n", arr.get(i).getShowId(), arr.get(i).getShortenedName(), arr.get(i).getEpisodes());
 		}
+		System.out.println();
+		return true;
 	}
 
 	public static void updateShow() {
 		boolean goodInput;
 		int menuOption = 0;
 		boolean success;
+		
+		System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-10s %-30s \n", "ID", "Name      " + ConsoleColors.RESET);
 		for(int i = 1; i <= currentUser.getList().size(); i++) {
-			System.out.println(i + ". " + currentUser.getList().get(i-1).getShortenedName());
+			System.out.printf("%-10s %-30s \n", i, currentUser.getList().get(i-1).getShortenedName());
 		}
+		System.out.println();
 		System.out.print(ConsoleColors.ITALIC + "Enter the id of the show you'd like to update: " + ConsoleColors.RESET);
 		do {
 			try {
@@ -466,27 +477,38 @@ public class TrackerController {
 		System.out.println(ConsoleColors.CYAN_BOLD + "+---------------------+");
 		System.out.println("+----- Your Shows ----+");
 		System.out.println("+---------------------+\n" + ConsoleColors.RESET);
-		System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-20s %-20s %-8s\n", "Name", "Episodes Watched", "Your Rating" + ConsoleColors.RESET);
+		System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-20s %-20s %-15s %-15s %-20s %-8s\n", "Name", "Episodes Watched", "Your Rating", "Average Rating", "Users Watching", "Users Finished" + ConsoleColors.RESET);
 		for(int i = 0; i < currentUser.getList().size(); i++) {
+			
 			int rating = currentUser.getList().get(i).getRating();
+			int avgRating = TVTrackerDaoSql.getAverageRatingForShow(currentUser.getList().get(i).getShowId());
 			String ratingToDisplay = rating <= 0 ? "N/A" : Integer.toString(rating) + " / 5";
+			String avgRatingToDisplay = (avgRating <= 0) ? "N/A" : Integer.toString(avgRating)  + " / 5";
 			
 			// Store episodes watched in variable
 			String episodesWatched = currentUser.getList().get(i).getEpisodesWatched() + " / " + currentUser.getList().get(i).getEpisodes();
 			
-			System.out.printf("%-20s %-20s %s\n", currentUser.getList().get(i).getShortenedName(), 
-					episodesWatched, ratingToDisplay);
-			System.out.println();
+			System.out.printf("%-20s %-20s %-15s %-15s %-20d %-8d\n", 
+					currentUser.getList().get(i).getShortenedName(), 
+					episodesWatched, 
+					ratingToDisplay,
+					avgRatingToDisplay, 
+					TVTrackerDaoSql.getUsersWhoAreWatching(currentUser.getList().get(i).getShowId()),
+					TVTrackerDaoSql.getUsersWhoAreFinished(currentUser.getList().get(i).getShowId()));
+			
+//			System.out.printf("%-20s %-20s %s\n", currentUser.getList().get(i).getShortenedName(), 
+//					episodesWatched, ratingToDisplay);
 
 			
-			System.out.println("        " + TVTrackerDaoSql.getUsersWhoAreWatching(currentUser.getList().get(i).getShowId()) 
-			+ " user(s) are watching this show. " + TVTrackerDaoSql.getUsersWhoAreFinished(currentUser.getList().get(i).getShowId()) 
-			+ " user(s) have finished this show.");
+//			System.out.println("        " + TVTrackerDaoSql.getUsersWhoAreWatching(currentUser.getList().get(i).getShowId()) 
+//			+ " user(s) are watching this show. " + TVTrackerDaoSql.getUsersWhoAreFinished(currentUser.getList().get(i).getShowId()) 
+//			+ " user(s) have finished this show.");
 			
-			int avgRating = TVTrackerDaoSql.getAverageRatingForShow(currentUser.getList().get(i).getShowId());
-			String avgRatingToDisplay = (avgRating <= 0) ? "N/A" : Integer.toString(avgRating)  + " / 5";
-			System.out.println("        " + "The average rating for this show is " + avgRatingToDisplay + "\n");
+//			int avgRating = TVTrackerDaoSql.getAverageRatingForShow(currentUser.getList().get(i).getShowId());
+//			String avgRatingToDisplay = (avgRating <= 0) ? "N/A" : Integer.toString(avgRating)  + " / 5";
+//			System.out.println("        " + "The average rating for this show is " + avgRatingToDisplay + "\n");
 
+//			System.out.println();
 		}
 		System.out.println(ConsoleColors.WHITE_UNDERLINED + "                                    \n" + ConsoleColors.RESET);
 	}
@@ -496,12 +518,16 @@ public class TrackerController {
 		boolean goodInput;
 		int menuOption = 0;
 		boolean success;
+		
+		// Print shows to rate 
+		System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-5s %-20s %-8s \n", "ID", "Name", "Your Rating" + ConsoleColors.RESET);
 		for(int i = 1; i <= currentUser.getList().size(); i++) {
 			int rating = currentUser.getList().get(i-1).getRating();
 			String ratingToDisplay = rating <= 0 ? "N/A" : Integer.toString(rating)  + " / 5";
-			System.out.println(i + ". " + currentUser.getList().get(i-1).getShortenedName() 
-					+ " - Current Rating: " + ratingToDisplay);
+			
+			System.out.printf("%-5d %-20s %-8s \n",i, currentUser.getList().get(i-1).getShortenedName(),ratingToDisplay );
 		}
+		System.out.println();
 		System.out.print(ConsoleColors.ITALIC + "Which show would you like to rate: " + ConsoleColors.RESET);
 		do {
 			try {
