@@ -245,8 +245,9 @@ public class TrackerController {
 			for(int i = 0; i < currentUser.getList().size(); i++) {
 				int rating = currentUser.getList().get(i).getRating();
 				String ratingToDisplay = rating <= 0 ? "N/A" : Integer.toString(rating)  + " / 5";
-				System.out.printf("%-20s %-1d / %-15d %s\n", currentUser.getList().get(i).getShortenedName(), currentUser.getList().get(i).getEpisodesWatched(), 
-						currentUser.getList().get(i).getEpisodes(), ratingToDisplay);
+				String episodesWatched = currentUser.getList().get(i).getEpisodesWatched() + " / " + currentUser.getList().get(i).getEpisodes();
+				System.out.printf("%-20s %-20s %s\n", currentUser.getList().get(i).getShortenedName(), 
+						episodesWatched, ratingToDisplay);
 			}
 			System.out.println();
 			System.out.println(ConsoleColors.WHITE_UNDERLINED + "                                     \n" + ConsoleColors.RESET);
@@ -328,22 +329,24 @@ public class TrackerController {
 	public static void addShow() {
 		System.out.println();
 		displayShowsToAdd();
-		System.out.print(ConsoleColors.ITALIC + "Enter the Show ID of the show you want to add: " + ConsoleColors.RESET);
 
 		boolean goodInput;
 		int showId = 0;
 		int episodesWatched = 0;
 		do {
+			System.out.print(ConsoleColors.ITALIC + "Enter the Show ID of the show you want to add: " + ConsoleColors.RESET);
 			try {
 				showId = ConsoleScanner.getInt();
 				goodInput = true;
 			}
 			catch (InputMismatchException e) {
 				System.out.println(ConsoleColors.RED + "Enter a number." + ConsoleColors.RESET);
+				ConsoleScanner.getString();
 				goodInput = false;
 			}
 			catch(Exception e) {
 				System.out.println(ConsoleColors.RED + "Not a valid option." + ConsoleColors.RESET);
+				ConsoleScanner.getString();
 				goodInput = false;
 			}
 		}
@@ -466,9 +469,15 @@ public class TrackerController {
 		for(int i = 0; i < currentUser.getList().size(); i++) {
 			int rating = currentUser.getList().get(i).getRating();
 			String ratingToDisplay = rating <= 0 ? "N/A" : Integer.toString(rating) + " / 5";
-			System.out.printf("%-20s %-1d / %-15d %s\n", currentUser.getList().get(i).getShortenedName(), currentUser.getList().get(i).getEpisodesWatched(), 
-					currentUser.getList().get(i).getEpisodes(), ratingToDisplay);
+			
+			// Store episodes watched in variable
+			String episodesWatched = currentUser.getList().get(i).getEpisodesWatched() + " / " + currentUser.getList().get(i).getEpisodes();
+			
+			System.out.printf("%-20s %-20s %s\n", currentUser.getList().get(i).getShortenedName(), 
+					episodesWatched, ratingToDisplay);
+			System.out.println();
 
+			
 			System.out.println("        " + TVTrackerDaoSql.getUsersWhoAreWatching(currentUser.getList().get(i).getShowId()) 
 			+ " user(s) are watching this show. " + TVTrackerDaoSql.getUsersWhoAreFinished(currentUser.getList().get(i).getShowId()) 
 			+ " user(s) have finished this show.");
