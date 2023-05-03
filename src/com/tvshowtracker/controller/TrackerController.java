@@ -248,7 +248,7 @@ public class TrackerController {
 			System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-20s %-20s %-8s\n", "Name", "Episodes Watched", "Your Rating" + ConsoleColors.RESET);
 			for(int i = 0; i < currentUser.getList().size(); i++) {
 				int rating = currentUser.getList().get(i).getRating();
-				String ratingToDisplay = rating <= 0 ? "N/A" : Integer.toString(rating)  + " / 5";
+				String ratingToDisplay = rating <= 0 ? "N / A" : Integer.toString(rating)  + " / 5";
 				String episodesWatched = currentUser.getList().get(i).getEpisodesWatched() + " / " + currentUser.getList().get(i).getEpisodes();
 				System.out.printf("%-20s %-20s %s\n", currentUser.getList().get(i).getShortenedName(), 
 						episodesWatched, ratingToDisplay);
@@ -482,8 +482,8 @@ public class TrackerController {
 			
 			int rating = currentUser.getList().get(i).getRating();
 			int avgRating = TVTrackerDaoSql.getAverageRatingForShow(currentUser.getList().get(i).getShowId());
-			String ratingToDisplay = rating <= 0 ? "N/A" : Integer.toString(rating) + " / 5";
-			String avgRatingToDisplay = (avgRating <= 0) ? "N/A" : Integer.toString(avgRating)  + " / 5";
+			String ratingToDisplay = rating <= 0 ? "N / A" : Integer.toString(rating) + " / 5";
+			String avgRatingToDisplay = (avgRating <= 0) ? "N / A" : Integer.toString(avgRating)  + " / 5";
 			
 			// Store episodes watched in variable
 			String episodesWatched = currentUser.getList().get(i).getEpisodesWatched() + " / " + currentUser.getList().get(i).getEpisodes();
@@ -523,7 +523,7 @@ public class TrackerController {
 		System.out.printf(ConsoleColors.YELLOW_UNDERLINED + "%-5s %-20s %-8s \n", "ID", "Name", "Your Rating" + ConsoleColors.RESET);
 		for(int i = 1; i <= currentUser.getList().size(); i++) {
 			int rating = currentUser.getList().get(i-1).getRating();
-			String ratingToDisplay = rating <= 0 ? "N/A" : Integer.toString(rating)  + " / 5";
+			String ratingToDisplay = rating <= 0 ? "N / A" : Integer.toString(rating)  + " / 5";
 			
 			System.out.printf("%-5d %-20s %-8s \n",i, currentUser.getList().get(i-1).getShortenedName(),ratingToDisplay );
 		}
