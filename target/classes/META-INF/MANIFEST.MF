@@ -1,5 +1,14 @@
 Manifest-Version: 1.0
+<<<<<<< HEAD
 Built-By: Marco
+=======
+<<<<<<< HEAD
+Built-By: alber
+Build-Jdk: 19.0.1
+=======
+Built-By: jedik
+>>>>>>> 25177d6b320f0c34d459927548b4285047df5445
 Build-Jdk: 17.0.6
+>>>>>>> a374d02f41043e4e164ce6f09cc0f1721269fc09
 Created-By: Maven Integration for Eclipse
 
