@@ -423,8 +423,10 @@ public class TVTrackerDaoSql {
 			pstmt.setInt(3, user.getId());
 
 			int updated = pstmt.executeUpdate();
-			if (updated == 1)
+			if (updated == 1) {
+				System.out.println( ConsoleColors.GREEN + "Show rating successfully updated.\n" + ConsoleColors.RESET);
 				return true;
+			}
 		}
 		catch (SQLException e) {
 			System.out.println(ConsoleColors.RED + "Show rating could not be updated. Try again." + ConsoleColors.RESET);

@@ -1,5 +1,10 @@
 Manifest-Version: 1.0
+<<<<<<< HEAD
 Built-By: jedik
 Build-Jdk: 17.0.6
+=======
+Built-By: Jo
+Build-Jdk: 19.0.2
+>>>>>>> 31213eb5c532bc88b07eca1c584bbcad33bdb418
 Created-By: Maven Integration for Eclipse
 
