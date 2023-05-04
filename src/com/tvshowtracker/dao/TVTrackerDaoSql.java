@@ -443,7 +443,6 @@ public class TVTrackerDaoSql {
 
 			pstmt.setInt(1, showId);
 			pstmt.execute();
-//			System.out.println(ConsoleColors.GREEN + "Show deleted!" + ConsoleColors.RESET);
 		}
 
 		catch (SQLException e) {
